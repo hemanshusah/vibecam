@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { Syne, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+
+const syne = Syne({ 
+  subsets: ["latin"], 
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-syne"
+});
+
+const geistMono = JetBrains_Mono({ 
+  subsets: ["latin"], 
+  weight: ["300", "400", "500"],
+  variable: "--font-geist-mono"
+});
+
+export const metadata: Metadata = {
+  title: "VibeCam",
+  description: "No login · no friction. Browser-native screen recorder.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${syne.variable} ${geistMono.variable} font-sans antialiased bg-noise`}>
+        {children}
+      </body>
+    </html>
+  );
+}
