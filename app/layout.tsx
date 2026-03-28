@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${syne.variable} ${geistMono.variable} font-sans antialiased bg-noise`}>
         {children}
-        <footer className="fixed bottom-0 left-0 right-0 py-3 text-center font-mono text-xs text-muted z-40">
+        <footer className="w-full py-8 text-center font-mono text-xs text-muted">
           Built by{' '}
           <a 
             href="https://linkedin.com/in/himanshusah" 
