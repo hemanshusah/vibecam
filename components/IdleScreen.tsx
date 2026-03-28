@@ -35,18 +35,16 @@ export function IdleScreen() {
         <div className="flex items-center justify-center gap-4 pt-8">
           <button
             onClick={toggleMic}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${
-              useMic ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
-            } border border-transparent hover:border-border`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${useMic ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
+              } border border-transparent hover:border-border`}
           >
             {useMic ? <Mic size={16} /> : <MicOff size={16} />}
             Mic {useMic ? 'ON' : 'OFF'}
           </button>
           <button
             onClick={toggleCamera}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${
-              useCamera ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
-            } border border-transparent hover:border-border`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${useCamera ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
+              } border border-transparent hover:border-border`}
           >
             {useCamera ? <Video size={16} /> : <VideoOff size={16} />}
             Cam {useCamera ? 'ON' : 'OFF'}
@@ -62,11 +60,10 @@ export function IdleScreen() {
                 <button
                   key={pos.value}
                   onClick={() => setCamPosition(pos.value)}
-                  className={`rounded-md text-[10px] font-mono font-bold transition-all ${
-                    camPosition === pos.value
-                      ? 'bg-accent text-surface scale-105'
-                      : 'bg-black/30 text-muted hover:bg-black/50 hover:text-text'
-                  }`}
+                  className={`rounded-md text-[10px] font-mono font-bold transition-all ${camPosition === pos.value
+                    ? 'bg-accent text-surface scale-105'
+                    : 'bg-black/30 text-muted hover:bg-black/50 hover:text-text'
+                    }`}
                   title={pos.value}
                 >
                   {pos.label}
@@ -78,14 +75,15 @@ export function IdleScreen() {
 
         <div className="pt-8 font-mono text-xs text-muted">
           Built by{' '}
-          <a 
-            href="https://linkedin.com/in/himanshusah" 
-            target="_blank" 
+          <a
+            href="https://linkedin.com/in/himanshusah"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-accent hover:text-white transition-colors"
           >
             Himanshu Sah - LinkedIn
           </a>
+          ! 👋
         </div>
       </div>
     </div>
