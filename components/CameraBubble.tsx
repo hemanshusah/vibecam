@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAppStore } from '@/store/useAppStore';
-import { PictureInPicture } from 'lucide-react';
 
 export function CameraBubble() {
   const { useCamera, status } = useAppStore();
@@ -11,25 +10,13 @@ export function CameraBubble() {
   
   // Drag state
   const bubbleRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ x: 24, y: 24 }); // Base bottom-left or custom
+  const [pos, setPos] = useState({ x: 24, y: 24 });
   const isDragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const handlePiP = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      if (document.pictureInPictureElement) {
-        await document.exitPictureInPicture();
-      } else if (videoRef.current) {
-        await videoRef.current.requestPictureInPicture();
-      }
-    } catch (err) {
-      console.error('PiP failed', err);
-    }
-  };
-
   const isActive = useCamera && (status === 'idle' || status === 'recording');
 
+  // Acquire / release camera stream
   useEffect(() => {
     let currentStream: MediaStream | null = null;
     let isCancelled = false;
@@ -59,17 +46,19 @@ export function CameraBubble() {
     };
   }, [isActive]);
 
+  // Attach stream to video element
   useEffect(() => {
     if (videoRef.current && stream) {
       videoRef.current.srcObject = stream;
-      videoRef.current.play().catch(console.error);
+      videoRef.current.play().catch(() => {});
     }
   }, [stream]);
 
+  // When user switches back to tab, force the video to resume playing
   useEffect(() => {
     const handleVisibility = () => {
       if (!document.hidden && videoRef.current && stream) {
-        videoRef.current.play().catch((e) => console.log('Auto-play suppressed', e));
+        videoRef.current.play().catch(() => {});
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
@@ -93,11 +82,9 @@ export function CameraBubble() {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current || !bubbleRef.current) return;
     
-    // Calculate new top/left
     const newX = e.clientX - offset.current.x;
     const newY = e.clientY - offset.current.y;
     
-    // Bounds check
     const maxX = window.innerWidth - bubbleRef.current.offsetWidth;
     const maxY = window.innerHeight - bubbleRef.current.offsetHeight;
     
@@ -121,7 +108,7 @@ export function CameraBubble() {
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
-      className={`fixed z-50 w-40 h-40 rounded-full overflow-hidden bg-black border-2 border-surface shadow-2xl transition-all duration-100 ease-out cursor-grab active:cursor-grabbing group ${
+      className={`fixed z-50 w-40 h-40 rounded-full overflow-hidden bg-black border-2 border-surface shadow-2xl transition-all duration-100 ease-out cursor-grab active:cursor-grabbing ${
         isDragging.current ? 'shadow-accent/20 scale-105' : ''
       }`}
       style={{
@@ -135,23 +122,13 @@ export function CameraBubble() {
           Camera Failed
         </div>
       ) : (
-        <>
-          <button 
-            onClick={handlePiP}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="absolute top-4 left-1/2 -translate-x-1/2 p-2 bg-black/60 hover:bg-black text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-            title="Pop out camera"
-          >
-            <PictureInPicture size={14} />
-          </button>
-          <video 
-            ref={videoRef}
-            className="w-full h-full object-cover scale-x-[-1]"
-            autoPlay 
-            playsInline 
-            muted 
-          />
-        </>
+        <video 
+          ref={videoRef}
+          className="w-full h-full object-cover scale-x-[-1]"
+          autoPlay 
+          playsInline 
+          muted 
+        />
       )}
     </div>
   );
