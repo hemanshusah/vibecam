@@ -75,6 +75,18 @@ export function IdleScreen() {
             </div>
           </div>
         )}
+
+        <div className="pt-8 font-mono text-xs text-muted">
+          Built by{' '}
+          <a 
+            href="https://linkedin.com/in/himanshusah" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-accent hover:text-white transition-colors"
+          >
+            Himanshu Sah - LinkedIn
+          </a>
+        </div>
       </div>
     </div>
   );

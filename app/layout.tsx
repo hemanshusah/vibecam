@@ -28,17 +28,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${syne.variable} ${geistMono.variable} font-sans antialiased bg-noise`}>
         {children}
-        <footer className="w-full py-8 text-center font-mono text-xs text-muted">
-          Built by{' '}
-          <a 
-            href="https://linkedin.com/in/himanshusah" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-accent hover:text-white transition-colors"
-          >
-            Himanshu Sah - LinkedIn
-          </a>
-        </footer>
       </body>
     </html>
   );
