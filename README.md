@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VibeCam
+
+**Browser-native screen recorder — like Loom, but with zero friction.**
+
+Open the URL, hit Record, trim your clip, get a shareable link. No sign-up, no app install. Built entirely in the browser using native Web APIs + Supabase cloud storage.
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14 (App Router) |
+| Styling | Tailwind CSS v4 |
+| State | Zustand |
+| Recording | MediaRecorder + getDisplayMedia |
+| Audio | Web AudioContext (mic + system audio mixing) |
+| Storage | Supabase (Storage bucket + PostgreSQL) |
+| Hosting | Vercel |
+| Fonts | Syne + JetBrains Mono (Google Fonts) |
+
+## Features
+
+- **Screen Recording** — Capture your entire screen, a window, or a tab
+- **Microphone Audio** — Toggle mic on/off, mixed with system audio
+- **Webcam Compositing** — Face camera baked into the recording as a circle overlay (Loom-style), with adjustable position (TL/TR/BL/BR)
+- **Trim Editor** — Non-destructive trim with draggable handles and live preview
+- **Cloud Sharing** — Upload & Share via Supabase; anyone with the link can watch
+- **Pause / Resume** — Pause and resume your recording mid-session
+- **Keyboard Shortcuts** — ESC to stop recording
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up environment variables
+
+Create a `.env.local` file:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_key
+```
+
+### 3. Set up Supabase database
+
+Run the contents of `supabase_setup.sql` in your Supabase project's SQL Editor. This creates the `videos` table and `recordings` storage bucket with appropriate RLS policies.
+
+### 4. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+vibecam/
+├── app/
+│   ├── page.tsx              ← Main app (Idle, Record, Edit screens)
+│   ├── layout.tsx            ← Root layout, font imports
+│   └── globals.css           ← CSS variables, base styles
+├── components/
+│   ├── IdleScreen.tsx        ← Hero + record button + toggles + cam position
+│   ├── RecordingScreen.tsx   ← Live preview + stop/pause buttons
+│   ├── EditorScreen.tsx      ← Video player + trim panel + upload
+│   ├── WatchScreen.tsx       ← Cloud viewer for shared recordings
+│   ├── TrimTimeline.tsx      ← Drag handles + playhead
+│   ├── ShareModal.tsx        ← Link copy modal
+│   ├── CameraBubble.tsx      ← Live camera preview overlay
+│   └── Header.tsx            ← Logo + status dot
+├── hooks/
+│   ├── useRecorder.ts        ← MediaRecorder + canvas webcam compositing
+│   ├── useAudioMixer.ts      ← AudioContext mic+system mix
+│   └── useStorage.ts         ← Supabase upload + fetch
+├── store/
+│   └── useAppStore.ts        ← Zustand global state
+├── lib/
+│   ├── supabase.ts           ← Supabase client instance
+│   └── format.ts             ← Time formatting helpers
+├── supabase_setup.sql        ← Database + storage bucket setup
+└── .env.local                ← Supabase credentials (gitignored)
+```
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push to GitHub
+2. Import to [Vercel](https://vercel.com)
+3. Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY` in Vercel → Settings → Environment Variables
+4. Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Built By
+
+[Himanshu Sah](https://linkedin.com/in/himanshusah)

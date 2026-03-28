@@ -45,3 +45,16 @@ We will update this list as we complete each step to track what has been done.
 - [x] Refactor `hooks/useStorage.ts` to upload explicitly to cloud bucket instead of auto IDB save
 - [x] Update `EditorScreen.tsx` to handle async upload button state and spinner
 - [x] Update `WatchScreen.tsx` to pull database metadata and load stream directly from Cloud URL
+
+## Phase 7: Camera Compositing (Loom-style)
+- [x] Composite webcam into screen recording via canvas (not just a visual overlay)
+- [x] Use `setInterval` draw loop so webcam keeps recording when tab is backgrounded
+- [x] Add camera position selector (top-left, top-right, bottom-left, bottom-right) to store
+- [x] Add position picker UI on IdleScreen when camera is toggled ON
+- [x] Remove all native `alert()` popups, errors log to console only
+
+## Phase 8: UI Polish & Attribution
+- [x] Add "Built by Himanshu Sah - LinkedIn" attribution on IdleScreen
+- [x] Update README.md with full project documentation
+- [x] Update progress.md and tasks.md to reflect all completed work
+
