@@ -14,38 +14,42 @@ export function CameraBubble() {
   const isDragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
+  const isActive = useCamera && (status === 'idle' || status === 'recording');
+
   useEffect(() => {
-    // Only fetch camera if it is toggled on, and we are recording or idle
+    let currentStream: MediaStream | null = null;
     let isCancelled = false;
 
-    if (useCamera && (status === 'idle' || status === 'recording')) {
+    if (isActive) {
       navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 320 } })
         .then((s) => {
           if (!isCancelled) {
+            currentStream = s;
             setStream(s);
-            if (videoRef.current) videoRef.current.srcObject = s;
           } else {
             s.getTracks().forEach(t => t.stop());
           }
         })
         .catch(e => {
-          console.warn('Camera failed to start', e);
+          console.warn('Camera failed', e);
           if (!isCancelled) setError(true);
         });
     } else {
-      setStream(s => {
-        if (s) s.getTracks().forEach(t => t.stop());
-        return null;
-      });
+      setStream(null);
       setError(false);
     }
     
     return () => {
       isCancelled = true;
-      if (stream) stream.getTracks().forEach(t => t.stop());
+      if (currentStream) currentStream.getTracks().forEach(t => t.stop());
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useCamera, status]); // Keep stream out to prevent loop
+  }, [isActive]);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
     e.preventDefault();

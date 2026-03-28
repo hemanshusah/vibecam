@@ -100,7 +100,6 @@ export function useRecorder() {
       
     } catch (e) {
       console.error('Recording initialization failed', e);
-      alert('Could not start recording. Please ensure you have granted screen permissions.');
     }
   }, [store.useMic, mixAudio, saveRecording, store]);
 
