@@ -1,9 +1,16 @@
-import { useAppStore } from '@/store/useAppStore';
+import { useAppStore, CamPosition } from '@/store/useAppStore';
 import { useRecorder } from '@/hooks/useRecorder';
 import { Mic, MicOff, Video, VideoOff } from 'lucide-react';
 
+const positions: { value: CamPosition; label: string }[] = [
+  { value: 'top-left', label: 'TL' },
+  { value: 'top-right', label: 'TR' },
+  { value: 'bottom-left', label: 'BL' },
+  { value: 'bottom-right', label: 'BR' },
+];
+
 export function IdleScreen() {
-  const { useMic, useCamera, toggleMic, toggleCamera } = useAppStore();
+  const { useMic, useCamera, toggleMic, toggleCamera, camPosition, setCamPosition } = useAppStore();
   const { startRecording } = useRecorder();
 
   return (
@@ -45,6 +52,29 @@ export function IdleScreen() {
             Cam {useCamera ? 'ON' : 'OFF'}
           </button>
         </div>
+
+        {/* Camera position picker — only visible when camera is ON */}
+        {useCamera && (
+          <div className="flex flex-col items-center gap-3 animate-fade-in">
+            <span className="font-mono text-xs text-muted">Camera position</span>
+            <div className="grid grid-cols-2 gap-1.5 w-20 h-20 p-2 bg-surface border border-border rounded-xl">
+              {positions.map((pos) => (
+                <button
+                  key={pos.value}
+                  onClick={() => setCamPosition(pos.value)}
+                  className={`rounded-md text-[10px] font-mono font-bold transition-all ${
+                    camPosition === pos.value
+                      ? 'bg-accent text-surface scale-105'
+                      : 'bg-black/30 text-muted hover:bg-black/50 hover:text-text'
+                  }`}
+                  title={pos.value}
+                >
+                  {pos.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

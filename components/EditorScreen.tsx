@@ -102,8 +102,7 @@ export function EditorScreen() {
         setShareModalOpen(true);
       }
     } catch (e) {
-      console.error(e);
-      alert("Failed to upload recording.");
+      console.error("Failed to upload recording.", e);
     } finally {
       setIsUploading(false);
     }
