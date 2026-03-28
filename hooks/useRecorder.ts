@@ -91,15 +91,35 @@ export function useRecorder() {
         const ctx = canvas.getContext('2d')!;
 
         // Draw loop — uses setInterval so it keeps running even when tab is backgrounded
+        const currentCamPosition = store.camPosition;
         globalDrawInterval = setInterval(() => {
           // Draw screen
           ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height);
 
-          // Draw webcam as a circle in the bottom-left corner
+          // Draw webcam circle at the user-selected position
           const bubbleSize = Math.round(canvas.width * 0.14);
           const margin = Math.round(canvas.width * 0.02);
-          const cx = margin + bubbleSize / 2;
-          const cy = canvas.height - margin - bubbleSize / 2;
+
+          let cx: number, cy: number;
+          switch (currentCamPosition) {
+            case 'top-left':
+              cx = margin + bubbleSize / 2;
+              cy = margin + bubbleSize / 2;
+              break;
+            case 'top-right':
+              cx = canvas.width - margin - bubbleSize / 2;
+              cy = margin + bubbleSize / 2;
+              break;
+            case 'bottom-right':
+              cx = canvas.width - margin - bubbleSize / 2;
+              cy = canvas.height - margin - bubbleSize / 2;
+              break;
+            case 'bottom-left':
+            default:
+              cx = margin + bubbleSize / 2;
+              cy = canvas.height - margin - bubbleSize / 2;
+              break;
+          }
 
           ctx.save();
           ctx.beginPath();
@@ -177,7 +197,7 @@ export function useRecorder() {
     } catch (e) {
       console.error('Recording initialization failed', e);
     }
-  }, [store.useMic, store.useCamera, mixAudio, saveRecording, store]);
+  }, [store.useMic, store.useCamera, store.camPosition, mixAudio, saveRecording, store]);
 
   const pauseRecording = useCallback(() => {
     if (globalRecorder && globalRecorder.state === 'recording') {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 export type AppStatus = 'idle' | 'recording' | 'stopped' | 'editing' | 'watching';
+export type CamPosition = 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
 
 type AppStore = {
   // Recording lifecycle
@@ -9,7 +10,7 @@ type AppStore = {
 
   // Active recording
   recordedBlob: Blob | null;
-  recordedUrl: string | null; // ObjectURL
+  recordedUrl: string | null;
   recSeconds: number;
   isPaused: boolean;
   
@@ -18,15 +19,17 @@ type AppStore = {
   setIsPaused: (val: boolean) => void;
 
   // Trim state
-  trimStart: number; // 0–1
-  trimEnd: number;   // 0–1
+  trimStart: number;
+  trimEnd: number;
   setTrim: (start: number, end: number) => void;
 
   // Options
   useMic: boolean;
   useCamera: boolean;
+  camPosition: CamPosition;
   toggleMic: () => void;
   toggleCamera: () => void;
+  setCamPosition: (pos: CamPosition) => void;
 
   // Share
   shareUrl: string | null;
@@ -57,8 +60,10 @@ export const useAppStore = create<AppStore>((set) => ({
 
   useMic: false,
   useCamera: false,
+  camPosition: 'bottom-left',
   toggleMic: () => set((state) => ({ useMic: !state.useMic })),
   toggleCamera: () => set((state) => ({ useCamera: !state.useCamera })),
+  setCamPosition: (camPosition) => set({ camPosition }),
 
   shareUrl: null,
   shareModalOpen: false,
@@ -66,7 +71,6 @@ export const useAppStore = create<AppStore>((set) => ({
   setShareModalOpen: (shareModalOpen) => set({ shareModalOpen }),
 
   discard: () => {
-    // Note: URL.revokeObjectURL is handled in the components / hooks, but state resets here
     set({
       status: 'idle',
       recordedBlob: null,
