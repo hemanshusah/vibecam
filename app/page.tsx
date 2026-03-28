@@ -7,6 +7,7 @@ import { IdleScreen } from '@/components/IdleScreen';
 import { RecordingScreen } from '@/components/RecordingScreen';
 import { EditorScreen } from '@/components/EditorScreen';
 import { WatchScreen } from '@/components/WatchScreen';
+import { CameraBubble } from '@/components/CameraBubble';
 
 export default function Home() {
   const { status, setStatus } = useAppStore();
@@ -35,6 +36,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-bg selection:bg-accent selection:text-surface">
       <Header />
+      <CameraBubble />
       
       {status === 'idle' && <IdleScreen />}
       {status === 'recording' && <RecordingScreen />}
