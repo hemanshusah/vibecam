@@ -16,7 +16,7 @@ export function CameraBubble() {
 
   const isActive = useCamera && (status === 'idle' || status === 'recording');
 
-  // Acquire / release camera stream
+  // Acquire / release camera stream for live preview only
   useEffect(() => {
     let currentStream: MediaStream | null = null;
     let isCancelled = false;
@@ -32,7 +32,7 @@ export function CameraBubble() {
           }
         })
         .catch(e => {
-          console.warn('Camera failed', e);
+          console.warn('Camera preview failed', e);
           if (!isCancelled) setError(true);
         });
     } else {
@@ -52,17 +52,6 @@ export function CameraBubble() {
       videoRef.current.srcObject = stream;
       videoRef.current.play().catch(() => {});
     }
-  }, [stream]);
-
-  // When user switches back to tab, force the video to resume playing
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (!document.hidden && videoRef.current && stream) {
-        videoRef.current.play().catch(() => {});
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-    return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, [stream]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
