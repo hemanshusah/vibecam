@@ -34,7 +34,7 @@ export function ShareModal() {
         
         <h3 className="font-syne font-bold text-2xl mb-2">Share recording</h3>
         <p className="font-mono text-xs text-muted mb-6">
-          v1 links work locally on this device. Cloud uploads coming in v2.
+          Cloud upload complete. Anyone with this link can view your recording.
         </p>
 
         <div className="flex items-center gap-2 p-1.5 bg-black border border-border rounded-lg">

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.100.1",
     "autoprefixer": "^10.4.27",
     "clsx": "^2.1.1",
     "idb-keyval": "^6.2.2",
@@ -17,12 +18,14 @@
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^3.5.0",
+    "uuid": "^13.0.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8.5.8",

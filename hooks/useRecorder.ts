@@ -81,25 +81,9 @@ export function useRecorder() {
         
         store.setRecordedData(finalBlob, objectUrl);
 
-        // Optional: Save to IndexedDB automatically here
-        const recId = `rec_${Date.now()}`;
-        const hasMic = !!micStream;
-        
-        await saveRecording({
-          id: recId,
-          date: new Date().toISOString(),
-          duration: store.recSeconds,
-          trimStart: 0,
-          trimEnd: 1,
-          mimeType: selectedMime,
-          hasMic,
-          hasCamera: store.useCamera, // Save camera preference footprint
-          blob: finalBlob
-        });
-
-        // The UI WatchScreen will look for '#watch:' + id, so we store the id format
-        // Wait, the share link uses the id directly. We can save the ID state in the store.
-        store.setShareUrl(recId); 
+        // We DO NOT upload yet. Wait for user to click 'Share'.
+        // We clear shareUrl here because it will be generated upon upload.
+        store.setShareUrl(null); 
         store.setStatus('editing');
       };
 

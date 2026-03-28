@@ -38,3 +38,10 @@ This document outlines the strict checklist of tasks to complete VibeCam v1 (Bro
 - [x] Validate 16:9 constraints and responsive sizing logic
 - [x] Verify maximum bundle size is healthy and performance stays 60FPS
 - [x] Final UI/UX review matching Token Design guidelines
+
+## Phase 6: Supabase Integration
+- [x] Create `.env.local` and configure `lib/supabase.ts`
+- [x] Update database schema with new metadata columns (`trim_start`, `trim_end`, `mime_type`, etc)
+- [x] Refactor `hooks/useStorage.ts` to upload explicitly to cloud bucket instead of auto IDB save
+- [x] Update `EditorScreen.tsx` to handle async upload button state and spinner
+- [x] Update `WatchScreen.tsx` to pull database metadata and load stream directly from Cloud URL
