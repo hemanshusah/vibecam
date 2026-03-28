@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useStorage, RecordingStorageItem } from '@/hooks/useStorage';
+import { useStorage, RecordingMetadata } from '@/hooks/useStorage';
 import { formatTime } from '@/lib/format';
 import { Calendar, Video, ArrowRight } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
@@ -9,7 +9,7 @@ export function WatchScreen({ id }: { id: string }) {
   const { setStatus } = useAppStore();
   
   const [loading, setLoading] = useState(true);
-  const [recording, setRecording] = useState<RecordingStorageItem | null>(null);
+  const [recording, setRecording] = useState<(RecordingMetadata & { videoUrl?: string }) | null>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,19 +21,18 @@ export function WatchScreen({ id }: { id: string }) {
       const data = await loadRecording(id);
       if (data) {
         setRecording(data);
-        const url = URL.createObjectURL(data.blob);
-        setBlobUrl(url);
+        setBlobUrl(data.videoUrl || null);
       }
       setLoading(false);
     }
     load();
     
     return () => {
-      // Cleanup object URL
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
+      // Cleanup object URL if needed (not needed for cloud URLs, but just in case)
+      if (blobUrl && blobUrl.startsWith('blob:')) URL.revokeObjectURL(blobUrl);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, loadRecording]); // Intentionally omitting blobUrl from deps to prevent loop
+  }, [id, loadRecording]); 
 
   const handleLoadedMetadata = () => {
     if (videoRef.current && recording) {
@@ -75,7 +74,7 @@ export function WatchScreen({ id }: { id: string }) {
       <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-6 text-center">
         <h2 className="font-syne font-bold text-3xl text-red">Recording not found</h2>
         <p className="font-mono text-muted max-w-sm">
-          This link works locally using IndexedDB. It may have expired or you&apos;re opening it on a different device.
+          This cloud recording may have expired, or the ID is incorrect.
         </p>
         <button 
           onClick={startFresh}

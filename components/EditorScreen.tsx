@@ -7,14 +7,15 @@ import { Share, Trash2, Play } from 'lucide-react';
 import { ShareModal } from './ShareModal';
 
 export function EditorScreen() {
-  const { recordedUrl, trimStart, trimEnd, setTrim, discard, shareUrl, setShareModalOpen, shareModalOpen } = useAppStore();
-  const { loadRecording, saveRecording } = useStorage();
+  const { recordedUrl, recordedBlob, useMic, useCamera, trimStart, trimEnd, setTrim, discard, shareUrl, setShareUrl, setShareModalOpen, shareModalOpen } = useAppStore();
+  const { saveRecording } = useStorage();
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState(0);
   const { recSeconds } = useAppStore(); // fallback for Infinity bug
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (videoRef.current && recordedUrl) {
@@ -76,14 +77,36 @@ export function EditorScreen() {
   };
 
   const handleShareClick = async () => {
-    // Save updated trim to IDB
     if (shareUrl) {
-      const rec = await loadRecording(shareUrl);
-      if (rec) {
-        await saveRecording({ ...rec, trimStart, trimEnd });
-      }
+      setShareModalOpen(true);
+      return;
     }
-    setShareModalOpen(true);
+
+    if (!recordedBlob) return;
+
+    try {
+      setIsUploading(true);
+      const newId = await saveRecording({
+        date: new Date().toISOString(),
+        duration: recSeconds,
+        trimStart,
+        trimEnd,
+        mimeType: recordedBlob.type,
+        hasMic: useMic,
+        hasCamera: useCamera,
+        blob: recordedBlob,
+      });
+
+      if (newId) {
+        setShareUrl(newId);
+        setShareModalOpen(true);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to upload recording.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   if (!recordedUrl) return null;
@@ -98,8 +121,13 @@ export function EditorScreen() {
           <button onClick={discard} className="flex items-center gap-2 px-4 py-2 hover:bg-surface border border-transparent hover:border-border text-muted hover:text-red transition-all rounded-full font-mono text-sm">
             <Trash2 size={16} /> Discard
           </button>
-          <button onClick={handleShareClick} className="flex items-center gap-2 px-6 py-2 bg-accent text-surface hover:bg-white font-syne font-bold rounded-full transition-colors shadow-lg shadow-accent/20">
-            <Share size={16} /> Share
+          <button 
+            onClick={handleShareClick} 
+            disabled={isUploading}
+            className={`flex items-center gap-2 px-6 py-2 bg-accent text-surface hover:bg-white font-syne font-bold rounded-full transition-colors shadow-lg shadow-accent/20 ${isUploading ? 'opacity-75 cursor-not-allowed' : ''}`}
+          >
+            {isUploading ? <div className="w-4 h-4 border-2 border-surface border-t-transparent rounded-full animate-spin" /> : <Share size={16} />}
+            {isUploading ? 'Uploading...' : (shareUrl ? 'Share' : 'Upload & Share')}
           </button>
         </div>
       </div>
