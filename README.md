@@ -2,7 +2,7 @@
 
 **Browser-native screen recorder — like Loom, but with zero friction.**
 
-Open the URL, hit Record, trim your clip, get a shareable link. No sign-up, no app install. Built entirely in the browser using native Web APIs + Supabase cloud storage.
+Open the URL, hit Record, trim your clip, get a shareable link. Built entirely in the browser using native Web APIs + Supabase cloud storage.
 
 ## Tech Stack
 
@@ -13,7 +13,7 @@ Open the URL, hit Record, trim your clip, get a shareable link. No sign-up, no a
 | State | Zustand |
 | Recording | MediaRecorder + getDisplayMedia |
 | Audio | Web AudioContext (mic + system audio mixing) |
-| Storage | Supabase (Storage bucket + PostgreSQL) |
+| Auth & Storage | Supabase (Auth + Storage bucket + PostgreSQL) |
 | Hosting | Vercel |
 | Fonts | Syne + JetBrains Mono (Google Fonts) |
 
@@ -26,6 +26,10 @@ Open the URL, hit Record, trim your clip, get a shareable link. No sign-up, no a
 - **Cloud Sharing** — Upload & Share via Supabase; anyone with the link can watch
 - **Pause / Resume** — Pause and resume your recording mid-session
 - **Keyboard Shortcuts** — ESC to stop recording
+- **User Authentication** — Email/password sign-up & sign-in via Supabase Auth
+- **My Recordings** — Dashboard to view, rename, download, and delete your recordings
+- **Download** — Download recordings locally without needing an account
+- **Editable Titles** — Name your recordings before upload, rename in dashboard
 
 ## Getting Started
 
@@ -48,6 +52,8 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY=your_supabase_key
 
 Run the contents of `supabase_setup.sql` in your Supabase project's SQL Editor. This creates the `videos` table and `recordings` storage bucket with appropriate RLS policies.
 
+Then run `supabase_auth_setup.sql` to add user authentication support (user_id column, authenticated INSERT/DELETE/UPDATE policies).
+
 ### 4. Run the dev server
 
 ```bash
@@ -62,8 +68,15 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 vibecam/
 ├── app/
 │   ├── page.tsx              ← Main app (Idle, Record, Edit screens)
-│   ├── layout.tsx            ← Root layout, font imports
-│   └── globals.css           ← CSS variables, base styles
+│   ├── layout.tsx            ← Root layout, font imports, AuthProvider
+│   ├── globals.css           ← CSS variables, base styles
+│   ├── auth/
+│   │   ├── layout.tsx        ← Auth pages layout
+│   │   ├── login/page.tsx    ← Sign in page
+│   │   └── register/page.tsx ← Sign up page
+│   └── dashboard/
+│       ├── layout.tsx        ← Dashboard layout
+│       └── page.tsx          ← My Recordings grid
 ├── components/
 │   ├── IdleScreen.tsx        ← Hero + record button + toggles + cam position
 │   ├── RecordingScreen.tsx   ← Live preview + stop/pause buttons
@@ -71,8 +84,11 @@ vibecam/
 │   ├── WatchScreen.tsx       ← Cloud viewer for shared recordings
 │   ├── TrimTimeline.tsx      ← Drag handles + playhead
 │   ├── ShareModal.tsx        ← Link copy modal
+│   ├── AuthModal.tsx         ← Inline login/register modal overlay
 │   ├── CameraBubble.tsx      ← Live camera preview overlay
-│   └── Header.tsx            ← Logo + status dot
+│   └── Header.tsx            ← Logo + auth state + navigation
+├── context/
+│   └── AuthProvider.tsx      ← Supabase Auth context
 ├── hooks/
 │   ├── useRecorder.ts        ← MediaRecorder + canvas webcam compositing
 │   ├── useAudioMixer.ts      ← AudioContext mic+system mix
@@ -83,6 +99,7 @@ vibecam/
 │   ├── supabase.ts           ← Supabase client instance
 │   └── format.ts             ← Time formatting helpers
 ├── supabase_setup.sql        ← Database + storage bucket setup
+├── supabase_auth_setup.sql   ← Auth migration (user_id + RLS)
 └── .env.local                ← Supabase credentials (gitignored)
 ```
 

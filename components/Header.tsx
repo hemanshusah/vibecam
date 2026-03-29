@@ -2,14 +2,16 @@
 
 import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/context/AuthProvider';
-import { User, LogOut, LayoutGrid } from 'lucide-react';
+import { User, LogOut, LayoutGrid, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { SupportModal } from './SupportModal';
 import { useState, useRef, useEffect } from 'react';
 
 export function Header() {
   const status = useAppStore((state) => state.status);
   const { user, loading, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu on outside click
@@ -42,6 +44,13 @@ export function Header() {
 
       {/* Right: Auth + Status */}
       <div className="flex items-center gap-3 pointer-events-auto">
+        <button
+          onClick={() => setSupportModalOpen(true)}
+          className="group flex items-center gap-2 px-5 py-2 bg-[#FF0000]/10 border border-[#FF0000]/30 rounded-full font-syne font-bold text-sm text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all shadow-[0_0_15px_rgba(255,0,0,0.15)] hover:shadow-[0_0_25px_rgba(255,0,0,0.4)]"
+        >
+          <Heart size={16} className="fill-[#FF0000]/20 group-hover:fill-white transition-colors" /> Support Me
+        </button>
+
         {status === 'recording' && (
           <div className="px-3 py-1.5 rounded-full bg-surface border border-border flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-red animate-[blink_1s_infinite]" />
@@ -94,6 +103,8 @@ export function Header() {
           </>
         )}
       </div>
+
+      <SupportModal isOpen={supportModalOpen} onClose={() => setSupportModalOpen(false)} />
     </header>
   );
 }
