@@ -1,14 +1,17 @@
 import { useRef, useEffect, useState } from 'react';
 import { useAppStore } from '@/store/useAppStore';
 import { useStorage } from '@/hooks/useStorage';
+import { useAuth } from '@/context/AuthProvider';
 import { TrimTimeline } from './TrimTimeline';
 import { formatTime } from '@/lib/format';
-import { Share, Trash2, Play } from 'lucide-react';
+import { Share, Trash2, Play, Download, Pencil } from 'lucide-react';
 import { ShareModal } from './ShareModal';
+import { AuthModal } from './AuthModal';
 
 export function EditorScreen() {
   const { recordedUrl, recordedBlob, useMic, useCamera, trimStart, trimEnd, setTrim, discard, shareUrl, setShareUrl, setShareModalOpen, shareModalOpen } = useAppStore();
   const { saveRecording } = useStorage();
+  const { user } = useAuth();
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const [duration, setDuration] = useState(0);
@@ -16,12 +19,24 @@ export function EditorScreen() {
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingUpload, setPendingUpload] = useState(false);
+  const [videoTitle, setVideoTitle] = useState('Untitled Recording');
 
   useEffect(() => {
     if (videoRef.current && recordedUrl) {
       videoRef.current.src = recordedUrl;
     }
   }, [recordedUrl]);
+
+  // Auto-trigger upload after successful auth if user had clicked "Upload & Share"
+  useEffect(() => {
+    if (user && pendingUpload) {
+      setPendingUpload(false);
+      doUpload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, pendingUpload]);
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
@@ -76,17 +91,13 @@ export function EditorScreen() {
     }
   };
 
-  const handleShareClick = async () => {
-    if (shareUrl) {
-      setShareModalOpen(true);
-      return;
-    }
-
-    if (!recordedBlob) return;
+  const doUpload = async () => {
+    if (!recordedBlob || !user) return;
 
     try {
       setIsUploading(true);
       const newId = await saveRecording({
+        title: videoTitle,
         date: new Date().toISOString(),
         duration: recSeconds,
         trimStart,
@@ -95,6 +106,7 @@ export function EditorScreen() {
         hasMic: useMic,
         hasCamera: useCamera,
         blob: recordedBlob,
+        userId: user.id,
       });
 
       if (newId) {
@@ -108,6 +120,39 @@ export function EditorScreen() {
     }
   };
 
+  const handleShareClick = async () => {
+    if (shareUrl) {
+      setShareModalOpen(true);
+      return;
+    }
+
+    // Auth gate: show inline modal instead of navigating away
+    if (!user) {
+      setPendingUpload(true);
+      setShowAuthModal(true);
+      return;
+    }
+
+    await doUpload();
+  };
+
+  const handleDownload = () => {
+    if (!recordedBlob) return;
+    const url = URL.createObjectURL(recordedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vibecam-${Date.now()}.webm`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+  };
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    // pendingUpload + user change will trigger the useEffect above
+  };
+
   if (!recordedUrl) return null;
 
   return (
@@ -115,10 +160,28 @@ export function EditorScreen() {
       
       {/* Top Bar */}
       <div className="w-full max-w-5xl flex justify-between items-center mb-4">
-        <h2 className="font-syne font-bold text-2xl">Edit & Share</h2>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-3">
+          <h2 className="font-syne font-bold text-2xl">Edit & Share</h2>
+          <div className="h-5 w-px bg-border" />
+          <div className="flex items-center gap-1.5 group cursor-text">
+            <input
+              value={videoTitle}
+              onChange={(e) => setVideoTitle(e.target.value)}
+              className="bg-transparent font-mono text-sm text-muted outline-none border-b border-transparent focus:border-accent/40 hover:border-border transition-colors max-w-[200px]"
+              placeholder="Recording title"
+            />
+            <Pencil size={10} className="text-muted/40 group-hover:text-muted transition-colors" />
+          </div>
+        </div>
+        <div className="flex gap-3">
           <button onClick={discard} className="flex items-center gap-2 px-4 py-2 hover:bg-surface border border-transparent hover:border-border text-muted hover:text-red transition-all rounded-full font-mono text-sm">
             <Trash2 size={16} /> Discard
+          </button>
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border text-text hover:border-accent/30 hover:text-accent font-mono text-sm rounded-full transition-all"
+          >
+            <Download size={16} /> Download
           </button>
           <button 
             onClick={handleShareClick} 
@@ -166,6 +229,25 @@ export function EditorScreen() {
       </div>
 
       {shareModalOpen && <ShareModal />}
+      {showAuthModal && (
+        <AuthModal
+          onClose={() => { setShowAuthModal(false); setPendingUpload(false); }}
+          onSuccess={handleAuthSuccess}
+        />
+      )}
+
+      <div className="pt-4 font-mono text-xs text-muted">
+        Built by{' '}
+        <a
+          href="https://linkedin.com/in/himanshusah"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-accent hover:text-white transition-colors"
+        >
+          Himanshu Sah - LinkedIn
+        </a>
+        ! 👋
+      </div>
     </div>
   );
 }

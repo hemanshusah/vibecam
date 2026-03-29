@@ -58,3 +58,14 @@ This document outlines the strict checklist of tasks to complete VibeCam v1 (Bro
 - [x] Update README.md with full project documentation
 - [x] Update progress.md and tasks.md to reflect all completed work
 
+## Phase 9: User Authentication & My Recordings
+- [x] Create `supabase_auth_setup.sql` migration (user_id column, RLS policies)
+- [x] Create `context/AuthProvider.tsx` with Supabase Auth session management
+- [x] Create `/auth/login` page (email + password sign-in)
+- [x] Create `/auth/register` page (sign-up with password strength indicator)
+- [x] Create `/dashboard` page (My Recordings grid with video preview, copy link, delete)
+- [x] Update `app/layout.tsx` to wrap with AuthProvider
+- [x] Update `components/Header.tsx` with auth state (Sign In / avatar dropdown)
+- [x] Update `hooks/useStorage.ts` to include `user_id` on upload
+- [x] Update `components/EditorScreen.tsx` to gate upload on authentication
+- [x] Build passes successfully with all new routes
