@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 export type RecordingMetadata = {
   id?: string;
+  title?: string;
   date: string;
   duration: number;
   trimStart: number;
@@ -15,6 +16,7 @@ export type RecordingMetadata = {
 export type RecordingStorageItem = RecordingMetadata & {
   blob: Blob;
   videoUrl?: string;
+  userId?: string;
 };
 
 export function useStorage() {
@@ -38,18 +40,25 @@ export function useStorage() {
         
       const videoUrl = publicUrlData.publicUrl;
 
-      // 3. Save into videos table
+      // 3. Save into videos table (with user_id if authenticated)
+      const insertPayload: Record<string, unknown> = {
+        video_url: videoUrl,
+        title: item.title || 'Untitled Recording',
+        duration: Math.round(item.duration),
+        trim_start: item.trimStart,
+        trim_end: item.trimEnd,
+        mime_type: item.mimeType,
+        has_mic: item.hasMic,
+        has_camera: item.hasCamera,
+      };
+
+      if (item.userId) {
+        insertPayload.user_id = item.userId;
+      }
+
       const { data: dbData, error: dbError } = await supabase
         .from('videos')
-        .insert([{
-          video_url: videoUrl,
-          duration: Math.round(item.duration),
-          trim_start: item.trimStart,
-          trim_end: item.trimEnd,
-          mime_type: item.mimeType,
-          has_mic: item.hasMic,
-          has_camera: item.hasCamera
-        }])
+        .insert([insertPayload])
         .select()
         .single();
 
@@ -91,3 +100,4 @@ export function useStorage() {
 
   return { saveRecording, loadRecording };
 }
+
