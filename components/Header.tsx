@@ -28,7 +28,7 @@ export function Header() {
   const initial = user?.email?.[0]?.toUpperCase() || '?';
 
   return (
-    <header className="fixed top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
+    <header className="fixed top-0 left-0 right-0 p-6 flex justify-between items-center z-50 pointer-events-none">
       {/* Left: Logo */}
       <Link href="/" className="flex items-center gap-3 pointer-events-auto">
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface border border-border">
