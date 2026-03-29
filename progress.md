@@ -69,3 +69,10 @@ We will update this list as we complete each step to track what has been done.
 - [x] Update `hooks/useStorage.ts` to include `user_id` on upload
 - [x] Update `components/EditorScreen.tsx` to gate upload on authentication
 - [x] Build passes successfully with all new routes
+
+## Phase 11: Support Me (Razorpay)
+- [x] Integrate Razorpay npm package for backend order orchestration
+- [x] Build Next.js API route `app/api/razorpay/route.ts` mapping rupees to paisa
+- [x] Add "Support Me" button to the application `Header.tsx` universally
+- [x] Construct an on-brand, dark-mode `SupportModal.tsx` with preset tip values and custom limits
+- [x] Inject dynamic Razorpay checkout script on modal trigger
