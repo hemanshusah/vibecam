@@ -41,7 +41,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    
+    // Check if Supabase returned a fake success (user already exists)
+    if (!error && data?.user?.identities && data.user.identities.length === 0) {
+      const { error: resendError } = await supabase.auth.resend({ 
+        type: 'signup', 
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/dashboard` }
+      });
+      
+      if (resendError) {
+        return { error: "Account already exists. Try signing in instead." };
+      }
+      return { error: null }; // Resent successfully
+    }
+
     return { error: error?.message ?? null };
   }, []);
 

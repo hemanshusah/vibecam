@@ -159,8 +159,8 @@ export function EditorScreen() {
     <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-8 animate-fade-in pb-32">
       
       {/* Top Bar */}
-      <div className="w-full max-w-5xl flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
+      <div className="w-full max-w-5xl flex flex-wrap justify-between items-center mb-4 gap-4">
+        <div className="flex flex-wrap items-center gap-3">
           <h2 className="font-syne font-bold text-2xl">Edit & Share</h2>
           <div className="h-5 w-px bg-border" />
           <div className="flex items-center gap-1.5 group cursor-text">
@@ -173,7 +173,7 @@ export function EditorScreen() {
             <Pencil size={10} className="text-muted/40 group-hover:text-muted transition-colors" />
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button onClick={discard} className="flex items-center gap-2 px-4 py-2 hover:bg-surface border border-transparent hover:border-border text-muted hover:text-red transition-all rounded-full font-mono text-sm">
             <Trash2 size={16} /> Discard
           </button>

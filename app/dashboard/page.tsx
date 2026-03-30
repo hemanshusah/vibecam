@@ -159,8 +159,8 @@ export default function DashboardPage() {
     <div className="min-h-screen p-6 animate-fade-in">
       {/* Header */}
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-10 pt-4">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center justify-between mb-10 pt-4 gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface border border-border">
                 <div className="w-3 h-3 bg-accent rounded-full animate-[pulseSlow_2s_infinite]" />
