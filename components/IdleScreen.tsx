@@ -14,7 +14,7 @@ export function IdleScreen() {
   const { startRecording } = useRecorder();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 pt-24 md:pt-32 animate-fade-in">
+    <div className="flex-grow flex flex-col items-center justify-around p-6 pt-28 pb-12 animate-fade-in">
       <div className="max-w-xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h2 className="font-syne text-5xl md:text-7xl font-bold tracking-tight text-text">

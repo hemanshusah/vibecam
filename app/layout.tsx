@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider";
+import { Footer } from "@/components/Footer";
+import { GlobalSupportModal } from "@/components/GlobalSupportModal";
 
-const syne = Syne({ 
-  subsets: ["latin"], 
+const syne = Syne({
+  subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-syne"
 });
 
-const geistMono = JetBrains_Mono({ 
-  subsets: ["latin"], 
+const geistMono = JetBrains_Mono({
+  subsets: ["latin"],
   weight: ["300", "400", "500"],
   variable: "--font-geist-mono"
 });
@@ -29,7 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${syne.variable} ${geistMono.variable} font-sans antialiased bg-noise`}>
         <AuthProvider>
-          {children}
+          <div className="flex flex-col min-h-screen">
+            <div className="flex-grow flex flex-col">
+              {children}
+            </div>
+            <Footer />
+            <GlobalSupportModal />
+          </div>
         </AuthProvider>
       </body>
     </html>

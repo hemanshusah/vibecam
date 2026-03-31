@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms &amp; Conditions — VibeCam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0A0A0B;
+            --surface: #111113;
+            --surface-2: #16161A;
+            --border: #1E1E22;
+            --border-light: #2A2A2F;
+            --text: #F0F0F2;
+            --muted: #9B9BA5;
+            --dim: #6B6B75;
+            --accent: #E8FF47;
+            --accent-dim: rgba(232, 255, 71, 0.10);
+            --accent-border: rgba(232, 255, 71, 0.25);
+            --radius: 12px;
+            --sans: 'Syne', Arial, sans-serif;
+            --mono: 'Geist Mono', 'Courier New', monospace;
+            --max: 760px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.022;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 11, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .header-inner {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: var(--sans);
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .doc-badge {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--dim);
+            border: 1px solid var(--border-light);
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        .hero {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 64px 24px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 6vw, 52px);
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            line-height: 1.06;
+            margin-bottom: 16px;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--dim);
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-meta span::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--dim);
+            border-radius: 50%;
+        }
+
+        .page-wrap {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .toc {
+            margin: 40px 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+        }
+
+        .toc-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 24px;
+        }
+
+        .toc li {
+            counter-increment: toc;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .toc li a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .toc li a:hover {
+            color: var(--accent);
+        }
+
+        .toc li::before {
+            content: counter(toc, decimal-leading-zero) ".  ";
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--dim);
+        }
+
+        .section {
+            margin-top: 56px;
+            padding-top: 8px;
+        }
+
+        .section-number {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            margin: 28px 0 10px;
+        }
+
+        .section p {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 14px;
+        }
+
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section ul,
+        .section ol {
+            margin: 12px 0 16px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .section ul li,
+        .section ol li {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.7;
+            padding: 5px 0 5px 22px;
+            position: relative;
+        }
+
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 14px;
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .section ol {
+            counter-reset: ol;
+        }
+
+        .section ol li {
+            counter-increment: ol;
+        }
+
+        .section ol li::before {
+            content: counter(ol) ".";
+            position: absolute;
+            left: 0;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--accent);
+            top: 6px;
+        }
+
+        .callout {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .callout.accent {
+            background: var(--accent-dim);
+            border-color: var(--accent-border);
+        }
+
+        .callout.warn {
+            background: rgba(255, 69, 69, 0.07);
+            border-color: rgba(255, 69, 69, 0.2);
+        }
+
+        .callout-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .callout.warn .callout-label {
+            color: #FF4545;
+        }
+
+        .callout p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .data-table th {
+            background: var(--surface);
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 10px 14px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            vertical-align: top;
+            line-height: 1.6;
+        }
+
+        .data-table tr:nth-child(even) td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-top: 24px;
+        }
+
+        .contact-card p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .contact-card a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+        }
+
+        .footer-inner {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 28px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-inner p {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--dim);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--dim);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-links a.active {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .toc ol {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 40px 16px 32px;
+            }
+
+            .page-wrap {
+                padding: 0 16px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <div class="logo-dot"></div>
+                VibeCam
+            </a>
+            <div class="doc-badge">Terms &amp; Conditions</div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-eyebrow">Legal · Terms</div>
+        <h1>Terms &amp; Conditions</h1>
+        <div class="hero-meta">
+            <span>Effective: 1 April 2025</span>
+            <span>Last updated: 1 April 2025</span>
+            <span>Version 1.0</span>
+        </div>
+    </div>
+
+    <div class="page-wrap">
+
+        <div class="toc">
+            <div class="toc-title">Contents</div>
+            <ol>
+                <li><a href="#t1">Agreement to terms</a></li>
+                <li><a href="#t2">The Service</a></li>
+                <li><a href="#t3">Eligibility &amp; accounts</a></li>
+                <li><a href="#t4">Screen recording rules</a></li>
+                <li><a href="#t5">Acceptable use</a></li>
+                <li><a href="#t6">Your content &amp; licence</a></li>
+                <li><a href="#t7">Sharing &amp; links</a></li>
+                <li><a href="#t8">Support Me payments</a></li>
+                <li><a href="#t9">Intellectual property</a></li>
+                <li><a href="#t10">Disclaimer of warranties</a></li>
+                <li><a href="#t11">Limitation of liability</a></li>
+                <li><a href="#t12">Indemnification</a></li>
+                <li><a href="#t13">Termination</a></li>
+                <li><a href="#t14">Governing law</a></li>
+                <li><a href="#t15">Changes to terms</a></li>
+                <li><a href="#t16">Contact</a></li>
+            </ol>
+        </div>
+
+        <div class="callout accent">
+            <div class="callout-label">Plain-English Summary</div>
+            <p>Use VibeCam for lawful purposes only. Don't record people without their knowledge. Don't share recordings
+                that contain illegal content. Payments are voluntary contributions. We can suspend accounts that break
+                these rules. Everything else below is the full legal detail.</p>
+        </div>
+
+        <!-- 1 -->
+        <div class="section" id="t1">
+            <div class="section-number">01</div>
+            <h2>Agreement to Terms</h2>
+            <p>These Terms and Conditions ("Terms") govern your access to and use of VibeCam ("VibeCam", "we", "us",
+                "our"), including our website, web application, and any related services (collectively, the "Service").
+            </p>
+            <p>By accessing or using the Service — including by recording, sharing, or watching a VibeCam recording —
+                you agree to be bound by these Terms and our <a href="vibecam-privacy-policy.html"
+                    style="color:var(--accent);">Privacy Policy</a>. If you do not agree, do not use the Service.</p>
+            <p>If you are using the Service on behalf of an organisation, you represent that you have authority to bind
+                that organisation to these Terms.</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="section" id="t2">
+            <div class="section-number">02</div>
+            <h2>The Service</h2>
+            <p>VibeCam provides a browser-based screen recording tool that allows users to:</p>
+            <ul>
+                <li>Capture their screen, browser tab, or application window using native browser APIs</li>
+                <li>Optionally capture microphone audio and/or camera video</li>
+                <li>Trim the beginning and end of recordings</li>
+                <li>Generate shareable links to their recordings</li>
+                <li>Make optional voluntary "Support Me" contributions to the developer</li>
+            </ul>
+            <p>The Service is provided "as is" and may be updated, modified, or discontinued at any time, with or
+                without notice. We will make reasonable efforts to provide advance notice of material changes.</p>
+
+            <h3>No account required (v1)</h3>
+            <p>In its current version, VibeCam does not require account creation to record or share. Recordings may be
+                stored locally in your browser. Features requiring cloud storage or payment do require an account.</p>
+
+            <h3>Beta features</h3>
+            <p>Some features may be marked as "beta" or "coming soon". These features are provided without warranty and
+                may change or be removed at any time.</p>
+        </div>
+
+        <!-- 3 -->
+        <div class="section" id="t3">
+            <div class="section-number">03</div>
+            <h2>Eligibility &amp; Accounts</h2>
+            <p>You must be at least 13 years old (or 16 in the EEA) to use VibeCam. By using the Service you confirm you
+                meet this age requirement.</p>
+
+            <h3>Account security</h3>
+            <p>If you create an account, you are responsible for maintaining the confidentiality of your login
+                credentials. You agree to notify us immediately of any unauthorised access to your account. VibeCam is
+                not liable for any loss arising from unauthorised use of your account where you have failed to keep
+                credentials secure.</p>
+
+            <h3>Accurate information</h3>
+            <p>You agree to provide accurate, current, and complete information when creating an account and to keep
+                that information updated.</p>
+        </div>
+
+        <!-- 4 -->
+        <div class="section" id="t4">
+            <div class="section-number">04</div>
+            <h2>Screen Recording Rules</h2>
+
+            <div class="callout warn">
+                <div class="callout-label">Critical — Your Legal Responsibility</div>
+                <p>Recording other people's screens, video calls, or private communications without their knowledge or
+                    consent may be illegal in your jurisdiction. You are solely responsible for ensuring your recordings
+                    comply with applicable law. VibeCam is a tool — legal responsibility for how you use it rests
+                    entirely with you.</p>
+            </div>
+
+            <h3>You must not use VibeCam to record:</h3>
+            <ul>
+                <li>Any person without their knowledge and consent where required by law</li>
+                <li>Private communications, phone calls, or video meetings where participants have not been informed of
+                    the recording</li>
+                <li>Content that you do not have the right to capture (e.g. DRM-protected media)</li>
+                <li>Personal data of others without a lawful basis under applicable privacy law</li>
+                <li>Confidential business information that you are not authorised to disclose</li>
+            </ul>
+
+            <h3>Two-party consent jurisdictions</h3>
+            <p>Some jurisdictions (including certain US states, Canada, and others) require all parties to consent
+                before a conversation may be recorded. It is your responsibility to know and comply with the recording
+                consent laws in your jurisdiction and the jurisdictions of any other parties you record.</p>
+
+            <h3>Workplace recordings</h3>
+            <p>If you use VibeCam in a workplace context, ensure your recordings comply with your employer's policies
+                and any applicable employment or privacy law. VibeCam is not responsible for how recordings are used in
+                employment contexts.</p>
+        </div>
+
+        <!-- 5 -->
+        <div class="section" id="t5">
+            <div class="section-number">05</div>
+            <h2>Acceptable Use Policy</h2>
+            <p>You agree not to use the Service to create, upload, store, or share content that:</p>
+            <ul>
+                <li>Is illegal under applicable law, or that facilitates illegal activity</li>
+                <li>Infringes the copyright, trademark, patent, trade secret, or other intellectual property rights of
+                    any third party</li>
+                <li>Constitutes or depicts child sexual abuse material (CSAM) in any form — violations will be reported
+                    to relevant authorities immediately</li>
+                <li>Contains viruses, malware, or other harmful code</li>
+                <li>Harasses, threatens, intimidates, or defames any individual or group</li>
+                <li>Constitutes unsolicited bulk communications (spam)</li>
+                <li>Impersonates VibeCam or any other person or entity</li>
+                <li>Violates any person's right to privacy</li>
+                <li>Promotes or glorifies violence, terrorism, or hate speech against any protected group</li>
+                <li>Constitutes non-consensual intimate imagery ("revenge porn")</li>
+            </ul>
+
+            <h3>Technical restrictions</h3>
+            <p>You agree not to:</p>
+            <ul>
+                <li>Attempt to reverse engineer, decompile, or disassemble any part of the Service</li>
+                <li>Scrape, crawl, or use automated means to access or collect data from the Service</li>
+                <li>Circumvent, disable, or interfere with security features of the Service</li>
+                <li>Use the Service to develop a competing product without our express written permission</li>
+                <li>Access the Service through unofficial means or APIs not documented by us</li>
+            </ul>
+        </div>
+
+        <!-- 6 -->
+        <div class="section" id="t6">
+            <div class="section-number">06</div>
+            <h2>Your Content &amp; Licence</h2>
+            <h3>You own your recordings</h3>
+            <p>You retain all ownership rights to recordings you create using VibeCam. We do not claim any ownership of
+                your content.</p>
+
+            <h3>Licence to us</h3>
+            <p>By uploading a recording to VibeCam's cloud storage (when using the Share feature), you grant VibeCam a
+                limited, non-exclusive, royalty-free, worldwide licence to store, reproduce, and transmit your recording
+                solely for the purpose of operating the Service — specifically, to store your recording and deliver it
+                to anyone you share the link with.</p>
+            <p>This licence is strictly limited to operating the Service. We do not use your recordings for advertising,
+                model training, or any other purpose. This licence terminates when you delete the recording.</p>
+
+            <h3>Your warranties</h3>
+            <p>By uploading content, you represent and warrant that: (a) you own or have the necessary rights to the
+                content; (b) the content does not infringe any third-party rights; and (c) the content complies with
+                these Terms and applicable law.</p>
+        </div>
+
+        <!-- 7 -->
+        <div class="section" id="t7">
+            <div class="section-number">07</div>
+            <h2>Sharing &amp; Links</h2>
+            <h3>Your responsibility for shared content</h3>
+            <p>When you generate a shareable link, you are responsible for who you share it with and for the
+                consequences of that sharing. VibeCam links are not encrypted beyond standard HTTPS — treat them as
+                semi-public once shared.</p>
+
+            <h3>Link availability</h3>
+            <p>We do not guarantee permanent availability of shared links. Links may become unavailable if: your
+                recording is deleted; your account is suspended; our infrastructure changes; or a recording expires per
+                your chosen settings.</p>
+
+            <h3>Reporting abusive content</h3>
+            <p>If you encounter a VibeCam link containing content that violates these Terms, please report it to <a
+                    href="mailto:abuse@vibecam.app" style="color:var(--accent);">abuse@vibecam.app</a>. We will review
+                reports and take appropriate action, which may include removing content and suspending accounts.</p>
+
+            <h3>DMCA / Copyright takedown</h3>
+            <p>If you believe a recording hosted on VibeCam infringes your copyright, please send a DMCA-compliant
+                notice to <a href="mailto:legal@vibecam.app" style="color:var(--accent);">legal@vibecam.app</a> with:
+                (a) identification of the copyrighted work; (b) identification of the infringing content and its URL;
+                (c) your contact information; (d) a statement of good faith belief; and (e) a statement of accuracy
+                under penalty of perjury.</p>
+        </div>
+
+        <!-- 8 -->
+        <div class="section" id="t8">
+            <div class="section-number">08</div>
+            <h2>"Support Me" Payments</h2>
+
+            <div class="callout accent">
+                <div class="callout-label">What "Support Me" means</div>
+                <p>VibeCam's "Support Me" feature allows you to make a voluntary financial contribution to support the
+                    ongoing development of the tool. It is a donation, not a purchase of goods or services, and does not
+                    entitle you to any specific features, service levels, or guarantees.</p>
+            </div>
+
+            <h3>Voluntary nature</h3>
+            <p>All "Support Me" contributions are entirely voluntary. Making a contribution does not create a contract
+                for services beyond what is already provided free of charge. VibeCam reserves the right to add, remove,
+                or change any features regardless of past contributions.</p>
+
+            <h3>Payment processing</h3>
+            <p>Payments are processed by a third-party payment provider (currently Stripe). By making a payment, you
+                also agree to that provider's terms of service. VibeCam does not store your full card number or
+                sensitive payment credentials.</p>
+
+            <h3>Pricing and currency</h3>
+            <p>Contribution amounts are displayed in the currency shown at checkout. You are responsible for any bank
+                fees, foreign exchange charges, or taxes that may apply in your jurisdiction.</p>
+
+            <h3>Taxes</h3>
+            <p>Depending on your location, contributions may be subject to VAT or other taxes. Where required,
+                applicable taxes will be shown at checkout before you confirm payment.</p>
+
+            <h3>Refund policy</h3>
+            <p>Because "Support Me" contributions are voluntary donations, they are generally non-refundable. If you
+                believe you were charged in error — for example, due to a technical failure resulting in a double charge
+                — contact us at <a href="mailto:support@vibecam.app"
+                    style="color:var(--accent);">support@vibecam.app</a> within 14 days of the transaction with your
+                transaction ID and we will investigate. Refunds at our discretion will be issued to the original payment
+                method only.</p>
+
+            <h3>No recurring billing</h3>
+            <p>Unless explicitly described as a subscription at the time of payment, all "Support Me" contributions are
+                one-time charges. We will not charge your payment method again without your explicit authorisation.</p>
+
+            <h3>Chargebacks</h3>
+            <p>If you initiate a chargeback for a legitimate payment, we reserve the right to suspend your account
+                pending resolution. Fraudulent chargeback requests will be contested.</p>
+        </div>
+
+        <!-- 9 -->
+        <div class="section" id="t9">
+            <div class="section-number">09</div>
+            <h2>Intellectual Property</h2>
+            <h3>VibeCam's IP</h3>
+            <p>The VibeCam name, logo, interface design, source code, and all other elements of the Service (excluding
+                user-uploaded content) are owned by or licenced to VibeCam and protected by copyright, trademark, and
+                other intellectual property laws. You may not reproduce, distribute, modify, or create derivative works
+                of any part of the Service without our express written permission.</p>
+
+            <h3>Feedback</h3>
+            <p>If you submit ideas, suggestions, or feedback about the Service ("Feedback"), you grant us a perpetual,
+                irrevocable, royalty-free licence to use that Feedback for any purpose, including improving the Service,
+                without any obligation to compensate or credit you.</p>
+        </div>
+
+        <!-- 10 -->
+        <div class="section" id="t10">
+            <div class="section-number">10</div>
+            <h2>Disclaimer of Warranties</h2>
+            <div class="callout warn">
+                <div class="callout-label">No Warranty</div>
+                <p>The Service is provided "AS IS" and "AS AVAILABLE" without any warranty of any kind, express or
+                    implied. To the maximum extent permitted by law, VibeCam expressly disclaims all warranties,
+                    including implied warranties of merchantability, fitness for a particular purpose, title, and
+                    non-infringement.</p>
+            </div>
+            <p>We do not warrant that: (a) the Service will be uninterrupted, timely, secure, or error-free; (b) any
+                recordings will be preserved without loss; (c) the Service will meet your specific requirements; or (d)
+                any defects will be corrected.</p>
+            <p>Screen recording relies on browser APIs and OS-level permissions. We do not warrant that recording will
+                work on all devices, browsers, or operating system versions.</p>
+        </div>
+
+        <!-- 11 -->
+        <div class="section" id="t11">
+            <div class="section-number">11</div>
+            <h2>Limitation of Liability</h2>
+            <p>To the maximum extent permitted by applicable law, VibeCam and its operators, employees, and affiliates
+                shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including
+                but not limited to: loss of recordings, loss of data, loss of profits or revenue, loss of goodwill, or
+                business interruption, arising from your use of or inability to use the Service, even if we have been
+                advised of the possibility of such damages.</p>
+            <p>Our total aggregate liability to you for all claims arising out of or relating to these Terms or the
+                Service shall not exceed the greater of: (a) the total amount paid by you to VibeCam in the 12 months
+                preceding the claim; or (b) £50 (fifty pounds sterling).</p>
+            <p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability for
+                certain types of damages. In those jurisdictions, our liability is limited to the maximum extent
+                permitted by law.</p>
+        </div>
+
+        <!-- 12 -->
+        <div class="section" id="t12">
+            <div class="section-number">12</div>
+            <h2>Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless VibeCam and its operators, officers, employees, and
+                agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable
+                legal fees) arising out of or relating to:</p>
+            <ul>
+                <li>Your use of the Service in violation of these Terms</li>
+                <li>Your recordings, including any claims that they infringe third-party rights or violate privacy or
+                    recording consent laws</li>
+                <li>Your violation of any applicable law or regulation</li>
+                <li>Any content you share via the Service</li>
+            </ul>
+        </div>
+
+        <!-- 13 -->
+        <div class="section" id="t13">
+            <div class="section-number">13</div>
+            <h2>Termination</h2>
+            <h3>By you</h3>
+            <p>You may stop using the Service at any time. If you have an account, you may delete it via Settings →
+                Account → Delete Account, or by contacting us. Deletion will result in the permanent removal of your
+                recordings from our servers (subject to legal retention obligations).</p>
+
+            <h3>By us</h3>
+            <p>We reserve the right to suspend or terminate your access to the Service at any time, with or without
+                notice, if we believe you have violated these Terms, if your activity poses a risk to other users or the
+                Service, or if required by law.</p>
+
+            <h3>Effect of termination</h3>
+            <p>Upon termination, your right to use the Service ceases immediately. Sections relating to intellectual
+                property, disclaimer of warranties, limitation of liability, indemnification, and governing law survive
+                termination.</p>
+        </div>
+
+        <!-- 14 -->
+        <div class="section" id="t14">
+            <div class="section-number">14</div>
+            <h2>Governing Law &amp; Disputes</h2>
+            <p>These Terms are governed by the laws of England and Wales, without regard to conflict of law principles.
+                You agree that any dispute arising from these Terms or the Service shall be subject to the exclusive
+                jurisdiction of the courts of England and Wales.</p>
+            <p>If you are a consumer in the EU, you may also be entitled to bring proceedings before the courts of your
+                country of residence and to use EU online dispute resolution mechanisms.</p>
+
+            <h3>Informal resolution first</h3>
+            <p>Before initiating formal legal proceedings, we ask that you contact us at the address in Section 16 to
+                attempt to resolve the dispute informally. Most issues can be resolved quickly with a direct
+                conversation.</p>
+        </div>
+
+        <!-- 15 -->
+        <div class="section" id="t15">
+            <div class="section-number">15</div>
+            <h2>Changes to These Terms</h2>
+            <p>We may update these Terms from time to time. When we make material changes, we will notify you by
+                updating the date at the top of this page and, where appropriate, sending you an email. Continued use of
+                the Service after changes take effect constitutes your acceptance of the revised Terms.</p>
+            <p>If you disagree with updated Terms, you should stop using the Service and, if applicable, delete your
+                account before the changes take effect.</p>
+        </div>
+
+        <!-- 16 -->
+        <div class="section" id="t16">
+            <div class="section-number">16</div>
+            <h2>Contact</h2>
+            <p>For questions about these Terms, legal notices, DMCA requests, or abuse reports:</p>
+            <div class="contact-card">
+                <p><strong style="color:var(--text);">VibeCam — Legal &amp; Support</strong></p>
+                <p>General: <a href="mailto:support@vibecam.app">support@vibecam.app</a></p>
+                <p>Legal &amp; DMCA: <a href="mailto:legal@vibecam.app">legal@vibecam.app</a></p>
+                <p>Abuse reports: <a href="mailto:abuse@vibecam.app">abuse@vibecam.app</a></p>
+                <p>Privacy: <a href="mailto:privacy@vibecam.app">privacy@vibecam.app</a></p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <p>&copy; 2025 VibeCam. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="vibecam-privacy-policy.html">Privacy Policy</a>
+                <a href="vibecam-terms-and-conditions.html" class="active">Terms &amp; Conditions</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
