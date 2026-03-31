@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { SupportModal } from "@/components/SupportModal";
+import { ConfirmModal } from "@/components/ConfirmModal";
 
 type VideoRecord = {
   id: string;
@@ -45,6 +46,8 @@ export default function DashboardPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [supportModalOpen, setSupportModalOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [videoToDelete, setVideoToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -77,8 +80,16 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this recording permanently?")) return;
+  const handleDelete = (id: string) => {
+    setVideoToDelete(id);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!videoToDelete) return;
+    const id = videoToDelete;
+    
+    setConfirmDeleteOpen(false);
     setDeletingId(id);
 
     try {
@@ -90,6 +101,7 @@ export default function DashboardPage() {
       console.error("Failed to delete:", err);
     } finally {
       setDeletingId(null);
+      setVideoToDelete(null);
     }
   };
 
@@ -385,6 +397,16 @@ export default function DashboardPage() {
         </div>
       </div>
       <SupportModal isOpen={supportModalOpen} onClose={() => setSupportModalOpen(false)} />
+      <ConfirmModal
+        isOpen={confirmDeleteOpen}
+        onClose={() => { setConfirmDeleteOpen(false); setVideoToDelete(null); }}
+        onConfirm={handleConfirmDelete}
+        title="Delete Recording"
+        message="Are you sure you want to delete this recording? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Keep"
+        isDestructive={true}
+      />
     </div>
   );
 }

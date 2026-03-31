@@ -3,20 +3,10 @@
 
 import { useState, useEffect } from "react";
 import { X, Heart, Loader2 } from "lucide-react";
+import { useAppStore } from "@/store/useAppStore";
 
-type SupportModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-// Extends Window to avoid TS error: Property 'Razorpay' does not exist on type 'Window & typeof globalThis'.
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
-
-export function SupportModal({ isOpen, onClose }: SupportModalProps) {
+export function GlobalSupportModal() {
+  const { supportModalOpen, setSupportModalOpen } = useAppStore();
   const [amount, setAmount] = useState<number | string>(100);
   const presetAmounts = [100, 500, 1000];
   const [loading, setLoading] = useState(false);
@@ -24,19 +14,23 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
 
   // Load Razorpay script when modal opens
   useEffect(() => {
-    if (isOpen) {
+    if (supportModalOpen) {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.async = true;
       document.body.appendChild(script);
 
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, [isOpen]);
+  }, [supportModalOpen]);
 
-  if (!isOpen) return null;
+  if (!supportModalOpen) return null;
+
+  const onClose = () => setSupportModalOpen(false);
 
   const handlePay = async () => {
     setError(null);
@@ -65,14 +59,13 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
 
       // 2. Open Razorpay Checkout popup
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Use Razorpay Key ID
-        amount: orderData.amount, // Amount in paisa
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.amount,
         currency: orderData.currency,
         name: "VibeCam",
         description: "Support VibeCam",
         order_id: orderData.id,
         handler: function (response: any) {
-          // You could verify the signature here if you want
           alert(`Payment Successful! Thank you for your support. Payment ID: ${response.razorpay_payment_id}`);
           onClose();
         },
@@ -82,11 +75,11 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
           contact: "",
         },
         theme: {
-          color: "#000000", // Using dark theme to match VibeCam
+          color: "#000000",
         },
       };
 
-      const rzp = new window.Razorpay(options);
+      const rzp = new (window as any).Razorpay(options);
       
       rzp.on("payment.failed", function (response: any) {
         setError(`Payment Failed: ${response.error.description}`);
@@ -128,7 +121,6 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
         )}
 
         <div className="w-full space-y-6">
-          {/* Preset Buttons */}
           <div className="grid grid-cols-3 gap-3">
             {presetAmounts.map((preset) => (
               <button
@@ -136,7 +128,7 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
                 type="button"
                 onClick={() => setAmount(preset)}
                 className={`py-3 rounded-xl font-mono text-sm font-bold transition-all ${
-                  amount === preset 
+                  Number(amount) === preset 
                     ? "bg-accent text-surface shadow-md" 
                     : "bg-bg border border-border text-text hover:border-accent hover:text-accent"
                 }`}

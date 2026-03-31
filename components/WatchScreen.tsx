@@ -63,7 +63,7 @@ export function WatchScreen({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex-grow flex items-center justify-center">
         <div className="w-8 h-8 rounded-full bg-accent animate-pulseSlow" />
       </div>
     );
@@ -71,7 +71,7 @@ export function WatchScreen({ id }: { id: string }) {
 
   if (!recording || !blobUrl) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-6 text-center">
+      <div className="flex-grow flex flex-col items-center justify-center p-6 space-y-6 text-center">
         <h2 className="font-syne font-bold text-3xl text-red">Recording not found</h2>
         <p className="font-mono text-muted max-w-sm">
           This cloud recording may have expired, or the ID is incorrect.
@@ -90,7 +90,7 @@ export function WatchScreen({ id }: { id: string }) {
   const dateObj = new Date(recording.date);
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6 animate-fade-in pt-24 pb-32">
+    <div className="flex-grow flex flex-col items-center p-6 animate-fade-in pt-28 pb-32">
       <div className="w-full max-w-5xl flex justify-between items-end mb-6">
         <div>
           <h1 className="font-syne font-bold text-3xl md:text-4xl mb-2">Recording Viewing Session</h1>
