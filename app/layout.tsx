@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Syne, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthProvider";
+
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { GlobalSupportModal } from "@/components/GlobalSupportModal";
+
 
 
 const syne = Syne({
