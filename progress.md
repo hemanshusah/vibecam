@@ -76,3 +76,14 @@ We will update this list as we complete each step to track what has been done.
 - [x] Add "Support Me" button to the application `Header.tsx` universally
 - [x] Construct an on-brand, dark-mode `SupportModal.tsx` with preset tip values and custom limits
 - [x] Inject dynamic Razorpay checkout script on modal trigger
+
+## Phase 12: Layout Refinement & Global Modals
+- [x] Refactor Support Modal into a global `GlobalSupportModal.tsx` at the root layout
+- [x] Implement `flex-grow` and `justify-around` on home page states for a single-screen, no-scroll experience
+- [x] Create and integrate Global Footer with legal links
+- [x] Remove visual 'gap' (design patch) between content and footer
+
+## Phase 13: Custom Confirmation Modals
+- [x] Create reusable `ConfirmModal.tsx` matching the design system
+- [x] Replace native browser `confirm()` in dashboard with custom destructive confirmation modal
+- [x] Optimize dashboard layout for better responsiveness during deletion
