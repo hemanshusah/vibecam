@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/context/AuthProvider";
 import { Heart, Mail } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
 
