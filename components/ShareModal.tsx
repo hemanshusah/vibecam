@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useAppStore } from '@/store/useAppStore';
 import { Copy, Check, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function ShareModal() {
-  const { shareUrl, setShareModalOpen } = useAppStore();
+  const { shareUrl, setShareModalOpen, setStatus } = useAppStore();
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
 
   const fullUrl = typeof window !== 'undefined' ? `${window.location.origin}/#watch:${shareUrl}` : '';
 
@@ -12,7 +14,14 @@ export function ShareModal() {
     try {
       await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      
+      // Auto-redirect to dashboard after successful copy
+      setTimeout(() => {
+        setCopied(false);
+        setShareModalOpen(false);
+        setStatus('idle');
+        router.push('/dashboard');
+      }, 1000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
     }

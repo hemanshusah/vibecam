@@ -18,8 +18,10 @@ import {
   LayoutGrid,
   Download,
   Pencil,
+  Heart,
 } from "lucide-react";
 import Link from "next/link";
+import { SupportModal } from "@/components/SupportModal";
 
 type VideoRecord = {
   id: string;
@@ -42,6 +44,7 @@ export default function DashboardPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -180,6 +183,12 @@ export default function DashboardPage() {
             <span className="font-mono text-xs text-muted hidden sm:block">
               {user.email}
             </span>
+            <button
+              onClick={() => setSupportModalOpen(true)}
+              className="flex items-center gap-2 px-3 py-1.5 font-mono text-[11px] text-[#FF0000] border border-[#FF0000]/20 hover:bg-[#FF0000]/10 rounded-lg transition-all"
+            >
+              <Heart size={12} className="fill-[#FF0000]/20" /> Support Me
+            </button>
             <button
               onClick={signOut}
               className="px-4 py-2 font-mono text-xs text-muted hover:text-red border border-transparent hover:border-border rounded-lg transition-all"
@@ -375,6 +384,7 @@ export default function DashboardPage() {
           ! 👋
         </div>
       </div>
+      <SupportModal isOpen={supportModalOpen} onClose={() => setSupportModalOpen(false)} />
     </div>
   );
 }
