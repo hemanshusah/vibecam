@@ -37,6 +37,10 @@ type AppStore = {
   setShareUrl: (url: string | null) => void;
   setShareModalOpen: (open: boolean) => void;
 
+  // Support Modal
+  supportModalOpen: boolean;
+  setSupportModalOpen: (open: boolean) => void;
+
   // Global Actions
   discard: () => void;
 };
@@ -69,6 +73,9 @@ export const useAppStore = create<AppStore>((set) => ({
   shareModalOpen: false,
   setShareUrl: (shareUrl) => set({ shareUrl }),
   setShareModalOpen: (shareModalOpen) => set({ shareModalOpen }),
+
+  supportModalOpen: false,
+  setSupportModalOpen: (supportModalOpen) => set({ supportModalOpen }),
 
   discard: () => {
     set({

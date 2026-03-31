@@ -33,7 +33,7 @@ export default function Home() {
   }, [setStatus, status]);
 
   return (
-    <main className="min-h-screen bg-bg selection:bg-accent selection:text-surface">
+    <main className="flex-grow flex flex-col bg-bg selection:bg-accent selection:text-surface">
       <Header />
       
       {status === 'idle' && <IdleScreen />}
