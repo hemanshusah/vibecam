@@ -4,7 +4,6 @@ import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/context/AuthProvider';
 import { User, LogOut, LayoutGrid, Heart } from 'lucide-react';
 import Link from 'next/link';
-import { SupportModal } from './SupportModal';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 

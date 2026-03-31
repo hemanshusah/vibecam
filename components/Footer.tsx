@@ -3,12 +3,9 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthProvider";
 import { Heart, Mail } from "lucide-react";
-import { useState } from "react";
 import { useAppStore } from "@/store/useAppStore";
-import { GlobalSupportModal } from "./GlobalSupportModal";
 
 export function Footer() {
-  const { user } = useAuth();
   const { setSupportModalOpen } = useAppStore();
 
   return (
