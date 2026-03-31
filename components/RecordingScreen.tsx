@@ -25,7 +25,7 @@ export function RecordingScreen() {
   }, [stopRecording]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-8 animate-fade-in">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 pt-24 md:pt-32 space-y-8 animate-fade-in">
       <div className="relative w-full max-w-5xl aspect-video rounded-xl overflow-hidden border border-border shadow-2xl bg-black">
         <video 
           ref={videoRef}

@@ -156,7 +156,7 @@ export function EditorScreen() {
   if (!recordedUrl) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-8 animate-fade-in pb-32">
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 pt-24 md:pt-32 space-y-8 animate-fade-in pb-32">
       
       {/* Top Bar */}
       <div className="w-full max-w-5xl flex flex-wrap justify-between items-center mb-4 gap-4">

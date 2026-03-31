@@ -6,13 +6,21 @@ import { User, LogOut, LayoutGrid, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { SupportModal } from './SupportModal';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export function Header() {
-  const status = useAppStore((state) => state.status);
+  const { status, setStatus } = useAppStore();
   const { user, loading, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [supportModalOpen, setSupportModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setStatus('idle');
+    router.push('/');
+  };
 
   // Close menu on outside click
   useEffect(() => {
@@ -29,9 +37,13 @@ export function Header() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 p-6 flex flex-wrap gap-4 justify-between items-center z-50 pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 p-4 md:p-6 flex flex-wrap gap-y-4 gap-x-6 justify-between items-center z-50 pointer-events-none">
       {/* Left: Logo */}
-      <Link href="/" className="flex items-center gap-3 pointer-events-auto">
+      <Link 
+        href="/" 
+        onClick={handleLogoClick}
+        className="flex items-center gap-3 pointer-events-auto shrink-0"
+      >
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-surface border border-border">
           <div className="w-3 h-3 bg-accent rounded-full animate-[pulseSlow_2s_infinite]" />
         </div>
@@ -44,7 +56,7 @@ export function Header() {
       </Link>
 
       {/* Right: Auth + Status */}
-      <div className="flex items-center gap-3 pointer-events-auto">
+      <div className="flex items-center gap-3 pointer-events-auto ml-auto">
         <button
           onClick={() => setSupportModalOpen(true)}
           className="group flex items-center gap-2 px-5 py-2 bg-[#FF0000]/10 border border-[#FF0000]/30 rounded-full font-syne font-bold text-sm text-[#FF0000] hover:bg-[#FF0000] hover:text-white transition-all shadow-[0_0_15px_rgba(255,0,0,0.15)] hover:shadow-[0_0_25px_rgba(255,0,0,0.4)]"
