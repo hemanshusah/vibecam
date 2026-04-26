@@ -94,10 +94,11 @@ export default function DashboardPage() {
     try {
       // Fetch all renders for now to ensure existing ones show up, 
       // but favor matching user_id for security in future.
-      const { data } = await supabase
-        .from("renders")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase
+      .from("renders")
+      .select("*")
+      .eq("user_id", user!.id) // CRITICAL: Only fetch the current user's renders
+      .order("created_at", { ascending: false });
       
       if (data) setRenders(data);
     } catch (err) {
