@@ -92,9 +92,8 @@ export default function DashboardPage() {
 
   const fetchRenders = useCallback(async () => {
     try {
-      // Fetch all renders for now to ensure existing ones show up, 
-      // but favor matching user_id for security in future.
-      const { data, error } = await supabase
+      // Fetch only matching user_id for security.
+      const { data } = await supabase
       .from("renders")
       .select("*")
       .eq("user_id", user!.id) // CRITICAL: Only fetch the current user's renders
@@ -104,7 +103,7 @@ export default function DashboardPage() {
     } catch (err) {
       console.error("Failed to fetch renders:", err);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
