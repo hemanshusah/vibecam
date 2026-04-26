@@ -3,7 +3,7 @@
 // ============================================
 
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     // Insert render record into Supabase
     console.log('Inserting render record:', renderId);
-    const { error: dbError } = await supabase.from('renders').insert({
+    const { error: dbError } = await supabaseAdmin.from('renders').insert({
       id: renderId,
       user_id: user_id, // Restore user_id for RLS compliance
       recording_id: composition.clips[0]?.src || 'unknown',
@@ -44,10 +44,11 @@ export async function POST(request: NextRequest) {
     }
 
     // In production, this would call renderMediaOnLambda()
-    // For now, simulate a render process
-    simulateRender(renderId, composition);
+    // For now, simulate a render process. 
+    // IMPORTANT: We AWAIT this on the serverless live server so Vercel doesn't kill the process.
+    await simulateRender(renderId, composition);
 
-    return NextResponse.json({ renderId, status: 'queued' });
+    return NextResponse.json({ renderId, status: 'done' });
   } catch (err) {
     console.error('Render API error:', err);
     return NextResponse.json(
@@ -61,16 +62,16 @@ async function simulateRender(renderId: string, composition: Record<string, unkn
   console.log(`\n🚀 STARTING RENDER: ${renderId}`);
   
   const resultUrl = ((composition?.clips as unknown[])?.[0] as Record<string, unknown>)?.src as string || '';
-  const totalSteps = 20;
+  const totalSteps = 5;
 
   for (let i = 1; i <= totalSteps; i++) {
     const progress = Math.round((i / totalSteps) * 100);
-    const estRemainingSec = Math.ceil((totalSteps - i) * 1);
+    const estRemainingSec = Math.ceil((totalSteps - i) * 0.5);
     
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 500));
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('renders')
         .update({
           status: progress >= 100 ? 'done' : 'rendering',

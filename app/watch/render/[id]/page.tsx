@@ -7,10 +7,12 @@ import Link from 'next/link';
 import { Player } from '@remotion/player';
 import { VibeCamComposition } from '@/remotion/VibeCamComposition';
 import { getTotalDurationFrames } from '@/lib/remotion-utils';
+import { useParams } from 'next/navigation';
 import { CompositionProps } from '@/lib/remotion-types';
 import { Watermark } from '@/components/Watermark';
-
 import { useAuth } from '@/context/AuthProvider';
+
+export const dynamic = 'force-dynamic';
 
 interface RenderRecord {
   id: string;
@@ -23,24 +25,29 @@ interface RenderRecord {
   created_at: string;
 }
 
-export default function WatchExportPage({ params }: { params: { id: string } }) {
+export default function WatchExportPage() {
+  const params = useParams();
+  const id = params?.id as string;
+  
   const { user } = useAuth();
   const [render, setRender] = useState<RenderRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRender() {
+      if (!id) return;
+      
       const { data } = await supabase
         .from('renders')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
       
       setRender(data);
       setLoading(false);
     }
     fetchRender();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (

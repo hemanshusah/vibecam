@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Loader2, Download, ArrowLeft, Scissors } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { Watermark } from '@/components/Watermark';
 import { useAuth } from '@/context/AuthProvider';
 import { formatTime } from '@/lib/format';
+
+export const dynamic = 'force-dynamic';
 
 interface VideoRecord {
   id: string;
@@ -17,24 +20,29 @@ interface VideoRecord {
   mime_type: string;
 }
 
-export default function WatchRecordingPage({ params }: { params: { id: string } }) {
+export default function WatchRecordingPage() {
+  const params = useParams();
+  const id = params?.id as string;
+  
   const { user } = useAuth();
   const [recording, setRecording] = useState<VideoRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRecording() {
+      if (!id) return;
+      
       const { data } = await supabase
         .from('videos')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single();
       
       setRecording(data);
       setLoading(false);
     }
     fetchRecording();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (

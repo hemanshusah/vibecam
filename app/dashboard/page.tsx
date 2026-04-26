@@ -182,12 +182,20 @@ export default function DashboardPage() {
       return;
     }
     try {
-      await supabase.from("videos").update({ title: trimmed }).eq("id", id);
+      const res = await fetch('/api/rename', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, title: trimmed, type: 'video' }),
+      });
+      
+      if (!res.ok) throw new Error('Failed to rename');
+      
       setRecordings((prev) =>
         prev.map((r) => (r.id === id ? { ...r, title: trimmed } : r))
       );
     } catch (err) {
       console.error("Failed to rename:", err);
+      alert("Failed to edit. Please check your connection and try again.");
     } finally {
       setEditingId(null);
     }
@@ -200,13 +208,21 @@ export default function DashboardPage() {
       return;
     }
     try {
+      const res = await fetch('/api/rename', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, title: trimmed, type: 'render' }),
+      });
+
+      if (!res.ok) throw new Error('Failed to rename render');
+
       const updatedComposition = { ...currentComposition, title: trimmed };
-      await supabase.from("renders").update({ composition: updatedComposition }).eq("id", id);
       setRenders((prev) =>
         prev.map((r) => (r.id === id ? { ...r, composition: updatedComposition } : r))
       );
     } catch (err) {
       console.error("Failed to rename render:", err);
+      alert("Failed to edit. Please check your connection and try again.");
     } finally {
       setEditingId(null);
     }
