@@ -19,6 +19,7 @@ type AuthContextType = {
   firebaseUser: FirebaseUser | null;
   session: Session | null;
   loading: boolean;
+  role: 'user' | 'admin';
   signUp: (email: string, password: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   resetPassword: (email: string) => Promise<{ error: string | null }>;
@@ -31,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [role, setRole] = useState<'user' | 'admin'>('user');
   const [loading, setLoading] = useState(true);
 
   // Sync Firebase user to Supabase
@@ -47,11 +49,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }),
       });
 
-      const { ghostPassword, error: syncError } = await response.json();
+      const { ghostPassword } = await response.json();
       
       if (ghostPassword) {
         // 2. Sign into Supabase with the Ghost Password
-        const { data: { session: supabaseSession }, error: loginError } = 
+        const { data: { session: supabaseSession } } = 
           await supabase.auth.signInWithPassword({ 
             email: fUser.email!, 
             password: ghostPassword 
@@ -60,6 +62,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (supabaseSession) {
           setSession(supabaseSession);
           setUser(supabaseSession.user);
+
+          // 3. Fetch Role from Profiles
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', supabaseSession.user.id)
+            .single();
+          
+          if (profile) setRole(profile.role as 'user' | 'admin');
         }
       }
     } catch (err) {
@@ -141,7 +152,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, firebaseUser, session, loading, signUp, signIn, resetPassword, signOut }}>
+    <AuthContext.Provider value={{ user, firebaseUser, session, loading, role, signUp, signIn, resetPassword, signOut }}>
       {children}
     </AuthContext.Provider>
   );

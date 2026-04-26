@@ -20,13 +20,11 @@
     "@vercel/analytics": "^2.0.1",
     "autoprefixer": "^10.4.27",
     "clsx": "^2.1.1",
-    "firebase": "^12.12.1",
-    "firebase-admin": "^13.8.0",
     "framer-motion": "^12.38.0",
     "hotkeys-js": "^4.0.3",
     "idb-keyval": "^6.2.2",
     "immer": "^11.1.4",
-    "jose": "^6.2.2",
+    "jose": "^5.9.6",
     "lucide-react": "^1.7.0",
     "nanoid": "^5.1.9",
     "next": "14.2.35",
@@ -38,6 +36,8 @@
     "remotion": "^4.0.451",
     "tailwind-merge": "^3.5.0",
     "uuid": "^13.0.0",
+    "firebase": "^11.4.0",
+    "firebase-admin": "^13.1.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {

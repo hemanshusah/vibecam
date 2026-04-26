@@ -2,14 +2,14 @@
 
 import { useAppStore } from '@/store/useAppStore';
 import { useAuth } from '@/context/AuthProvider';
-import { User, LogOut, LayoutGrid, Heart } from 'lucide-react';
+import { User, LogOut, LayoutGrid, Heart, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 export function Header() {
   const { status, setStatus, setSupportModalOpen } = useAppStore();
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, signOut, role } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -98,6 +98,15 @@ export function Header() {
                       >
                         <LayoutGrid size={14} className="text-accent" /> My Recordings
                       </Link>
+                      {role === 'admin' && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 font-mono text-sm text-text hover:bg-bg transition-colors"
+                        >
+                          <Shield size={14} className="text-yellow-400" /> Admin Command
+                        </Link>
+                      )}
                       <button
                         onClick={() => { signOut(); setMenuOpen(false); }}
                         className="flex items-center gap-3 w-full px-4 py-2.5 font-mono text-sm text-muted hover:text-red hover:bg-bg transition-colors"
