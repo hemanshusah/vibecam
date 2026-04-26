@@ -104,7 +104,7 @@ export function Header() {
                           onClick={() => setMenuOpen(false)}
                           className="flex items-center gap-3 px-4 py-2.5 font-mono text-sm text-text hover:bg-bg transition-colors"
                         >
-                          <Shield size={14} className="text-yellow-400" /> Admin Command
+                          <Shield size={14} className="text-yellow-400" /> Admin Setting
                         </Link>
                       )}
                       <button

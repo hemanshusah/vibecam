@@ -86,12 +86,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setFirebaseUser(fUser);
       
       if (fUser) {
-        if (fUser.emailVerified) {
-          await syncWithSupabase(fUser);
-        } else {
-          // User is logged into Firebase but not verified
-          setLoading(false);
-        }
+        // BYPASS: Sync even if not verified for now
+        await syncWithSupabase(fUser);
       } else {
         // Logged out of Firebase, must log out of Supabase
         await supabase.auth.signOut();
@@ -128,9 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = useCallback(async (email: string, password: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-      if (!userCredential.user.emailVerified) {
-        return { error: "Please verify your email before signing in." };
-      }
+      // BYPASS: Allowing login without verification for now
       return { error: null };
     } catch (error: any) {
       return { error: error.message };
