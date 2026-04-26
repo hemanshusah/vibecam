@@ -1,0 +1,495 @@
+VIBECAM
+Remotion Video Editor
+Engineering Build Prompt — For Antigravity
+  v2.0       Remotion 4       Next.js 14       Supabase  
+MISSION BRIEF
+Replace VibeCam’s basic start/end trim editor with a full-featured, Remotion-powered non-linear video editor — embedded directly in the browser. Users should feel like they’re using a lightweight version of ScreenStudio or Descript, not a slider. Everything renders in React, exports via Remotion’s Lambda renderer or WASM encoder, and integrates with the existing Supabase + Cloudflare R2 storage stack.
+
+1. Context & What You Are Building
+1.1 Where We Are Now
+VibeCam v1 is a browser-based screen recorder with a minimal editing UI consisting of:
+A single timeline track with two drag handles (trim start, trim end)
+A basic video player for preview
+A Share button that stores the recording locally or uploads to Cloudflare R2
+This is intentionally minimal for v1. It ships fast and gets users recording. But power users immediately ask for more: cutting dead silence out of the middle, adding a title card, zooming in on a UI element, annotating with text. v1 cannot do any of this.
+1.2 What You Are Building
+A fully embedded, Remotion-powered video editor that replaces the v1 trim panel. The editor lives at the /edit route in the Next.js app and receives a recording (from localStorage or R2). The user edits their recording using a rich timeline UI, previews the result in real time via Remotion's Player component, and exports a final rendered MP4.
+Think of it as: Loom’s simplicity × Remotion’s rendering power × VibeCam’s dark aesthetic.
+1.3 Why Remotion
+Remotion renders video using React components — every edit is a React state change, not a video manipulation library
+The @remotion/player package gives a real-time interactive preview with frame-accurate scrubbing at zero cost
+Remotion Lambda can render a final MP4 in the cloud server-side in seconds, no ffmpeg.wasm needed
+Remotion Compositions are just React — adding a title card or zoom effect is a new React component, not a ffmpeg filter
+Remotion has first-class TypeScript support and an active ecosystem of community compositions
+
+
+2. Full Feature Set to Build
+2.1 Timeline Editor
+Core timeline requirements
+Multi-track timeline — minimum: 1 video track, 1 audio track, 1 overlay track
+Tracks rendered as horizontal lanes with colour-coded clip blocks
+Horizontal zoom: pinch-to-zoom on trackpad, scroll wheel, or +/− buttons
+Time ruler at the top showing seconds and frames (e.g. 0:00:01.12)
+Playhead that scrubs in real time as Remotion Player plays
+Click anywhere on the timeline to seek the Remotion Player to that frame
+Current timecode display in the corner (HH:MM:SS:FF format)
+Clip manipulation
+Trim clip edges: drag left or right edge of any clip block to adjust in/out point
+Split clip: press S (or right-click → Split) at the playhead position
+Delete clip: press Delete/Backspace or right-click → Delete
+Slip clip: drag the body of a clip to reposition it in time without changing its duration
+Ripple delete: when a clip is deleted, downstream clips shift left automatically (toggle on/off)
+Drag and drop to reorder clips on the same track
+Snap to playhead, snap to clip edges, snap to time markers (toggle snapping)
+Keyboard shortcuts — must implement all
+
+2.2 Remotion Player (Preview Panel)
+Embed @remotion/player in the editor left/centre panel
+Player renders the Remotion Composition in real time, reflecting all edits immediately
+Custom playback controls below player: Play, Pause, Step Back, Step Forward, loop toggle, playback speed (0.5x, 1x, 1.5x, 2x)
+Volume control with mute toggle
+Fullscreen mode (standard browser fullscreen API)
+Player aspect ratio locks to recording aspect ratio (usually 16:9) — pillarboxed or letterboxed as needed
+Resolution badge shown (e.g. "1920×1080 · 30fps")
+2.3 Overlay & Effects Layer
+Each overlay element is a Remotion sequence placed on the overlay track. Users add overlays from a sidebar panel. All overlays are React components.
+Text overlays
+Click "Add Text" → text block appears at playhead position on overlay track
+Double-click the overlay block on the timeline to open the text editor popover
+Font family picker: Syne, Geist Mono, Inter, Arial (at minimum)
+Font size, weight (regular / bold), colour picker (hex + opacity)
+Alignment: left, centre, right
+Background: none, solid fill, frosted glass blur
+Drag text block on canvas to reposition it in the frame
+Drag edges of overlay block on timeline to set appear/disappear frame
+Built-in entrance animations: fade in, slide up, slide from left, scale in
+Built-in exit animations: fade out, slide down, scale out
+Shape overlays
+Add rectangle, circle, or line overlay
+Fill colour, stroke colour, stroke width, opacity
+Arrow shape with adjustable endpoint — useful for pointing at UI elements
+Same timeline block behaviour as text overlays
+Zoom & pan effect (highest priority)
+User selects a time range on the video track
+Clicks "Add Zoom" in the toolbar
+A zoom overlay block appears on the effects track covering the selected range
+Properties panel: zoom level (100–400%), zoom centre X/Y (click on preview to set), easing (linear / ease-in-out / spring)
+Smoothly animated using Remotion interpolate() with spring easing
+This is the single most requested editing feature for screen recordings — prioritise this
+Blur / redaction overlay
+Draw a rectangle on the preview frame to mark a region to blur
+Blur intensity slider (Gaussian blur radius 4–40)
+Timeline block controls when blur is active
+Use case: hiding passwords, personal info, confidential UI in screen recordings
+Implemented via CSS filter on a positioned div overlay inside the Remotion composition
+Cursor highlight overlay
+Detect or let user mark timestamps where the cursor is the focus
+Renders a circular highlight / halo around the cursor position at those times
+Colour and size configurable
+Use case: makes screen recordings easier to follow
+2.4 Audio Track Controls
+Display audio waveform visualisation on the audio track lane
+Volume envelope: draggable gain nodes at any point on the clip — right-click audio track to add a gain point
+Fade in / fade out handles at clip edges (drag to extend)
+Mute toggle per clip
+Background music track: user can upload an audio file to add as a background music layer
+BG music volume slider (default 20%)
+BG music loops to fill the duration automatically
+Optional: noise reduction toggle (use a JS noise reduction library or flag for v3)
+2.5 Intro & Outro Sequences
+Add Intro button → inserts a pre-built Remotion composition at frame 0
+Add Outro button → inserts a pre-built Remotion composition at the end
+Intro/outro are React components inside the Remotion composition tree
+Built-in intro styles (implement at least 2)
+Style A — "Dark Minimal": Black background, animated VibeCam logo dot, user-provided title fades in, subtitle slides up. 3 seconds.
+Style B — "Gradient Burst": Animated gradient background, title scales in with spring physics, tagline appears below. 3–5 seconds.
+Outro styles (implement at least 1)
+Style A — "Call to Action": Dark screen, "Watch the full recording at vibecam.app" + animated link, subscribe/share buttons. Customisable text.
+Editable intro fields
+Title (maps to a text prop in the Remotion composition)
+Subtitle / tagline
+Duration (2–6 seconds slider)
+Style selector (dropdown of available styles)
+2.6 Speed Ramping
+User selects a time range on the video track
+Right-click → "Change Speed" OR use toolbar
+Speed options: 0.25x, 0.5x, 0.75x, 1x, 1.5x, 2x, 4x
+The clip block on the timeline visually stretches or compresses to reflect the new duration
+Implemented by wrapping the clip’s frames in a Remotion <Sequence> with adjusted durationInFrames and frame offset mapping
+Audio pitch correction on slowdown (use a Tone.js pitch shifter or flag for v3)
+2.7 Cursor & Click Effects (Screen Recording Specific)
+These features are unique to screen recorders and are a major differentiator from generic video editors.
+Click highlight: animated ripple/circle appears at cursor click positions — auto-detected if cursor metadata is available, otherwise manually placeable
+Smooth cursor: applies CSS transition smoothing to cursor movement in the composition
+Cursor size: 1x, 1.5x, 2x scale option
+Hide cursor toggle: completely removes cursor from the recording
+2.8 Captions / Subtitles (v2 stretch goal)
+Auto-transcription: send audio to Whisper API (OpenAI) and return timestamped transcript
+Captions rendered as a Remotion text overlay synced to transcript timestamps
+Caption style picker: bottom-centre white text, "highlight" style (one word highlighted at a time), burned-in vs soft overlay
+Manual caption editor: user can edit, split, merge caption segments
+Export with or without burned-in captions
+Mark as v2 stretch goal — architecture should support adding this without refactoring the composition
+
+
+3. Remotion Architecture
+3.1 The Main Composition
+Everything the user edits maps to a single Remotion Composition called <VibeCamComposition>. This is the source of truth for the rendered video.
+// remotion/VibeCamComposition.tsx
+export const VibeCamComposition: React.FC<CompositionProps> = ({
+  clips,          // VideoClip[]
+  overlays,       // Overlay[]
+  effects,        // Effect[]
+  audioTracks,    // AudioTrack[]
+  intro,          // IntroConfig | null
+  outro,          // OutroConfig | null
+  fps,            // number (default 30)
+  width,          // number (default 1920)
+  height,         // number (default 1080)
+}) => {
+  return (
+    <AbsoluteFill>
+      {intro && <Sequence durationInFrames={intro.durationFrames}><IntroSequence {...intro} /></Sequence>}
+      {clips.map(clip => <Sequence key={clip.id} from={clip.startFrame} durationInFrames={clip.durationFrames}><VideoClip {...clip} /></Sequence>)}
+      {overlays.map(o => <Sequence key={o.id} from={o.startFrame} durationInFrames={o.durationFrames}><OverlayElement {...o} /></Sequence>)}
+      {effects.map(e => <Sequence key={e.id} from={e.startFrame} durationInFrames={e.durationFrames}><EffectLayer {...e} /></Sequence>)}
+      {outro && <Sequence from={totalDurationFrames - outro.durationFrames}><OutroSequence {...outro} /></Sequence>}
+    </AbsoluteFill>
+  );
+};
+
+3.2 Composition Props Schema (TypeScript)
+
+3.3 State Management
+Use Zustand for the editor store. The store is the single source of truth for CompositionProps. Every user action (drag clip, add text, change speed) dispatches a store action that updates CompositionProps. Remotion Player re-renders automatically because it receives CompositionProps as inputProps.
+// store/useEditorStore.ts
+type EditorStore = {
+  compositionProps: CompositionProps;
+  selectedClipId: string | null;
+  selectedOverlayId: string | null;
+  playheadFrame: number;
+  zoom: number;                 // timeline zoom level 1–10
+  isPlaying: boolean;
+  history: CompositionProps[];  // for undo/redo
+  historyIndex: number;
+
+  // actions
+  addClip: (clip: VideoClip) => void;
+  splitClip: (clipId: string, atFrame: number) => void;
+  deleteClip: (clipId: string) => void;
+  addOverlay: (overlay: Overlay) => void;
+  updateOverlay: (id: string, props: Partial<Overlay>) => void;
+  deleteOverlay: (id: string) => void;
+  addEffect: (effect: Effect) => void;
+  setPlayheadFrame: (frame: number) => void;
+  undo: () => void;
+  redo: () => void;
+};
+
+3.4 Undo / Redo
+Every action that mutates CompositionProps must push the previous state onto history[]
+history is capped at 50 entries to prevent memory bloat
+Undo pops the last entry and applies it; Redo re-applies
+Ephemeral actions (playhead scrub, timeline scroll) do NOT push to history
+Use Immer inside Zustand for ergonomic immutable updates: set(produce(state => { state.compositionProps.clips.push(clip) }))
+
+
+4. Editor UI Layout
+4.1 Overall Layout
+The editor fills the full viewport. Layout is a CSS Grid with three regions:
+┌─────────────────────────────────────────┐
+│  TOOLBAR  (top bar — 40px)              │
+├──────────────────────┬──────────────────┤
+│                      │                  │
+│   PREVIEW PANEL      │  PROPERTIES      │
+│   (Remotion Player)  │  PANEL           │
+│   ~60% width         │  ~30% width      │
+│                      │                  │
+├──────────────────────┴──────────────────┤
+│  TIMELINE PANEL  (bottom — 280–400px)    │
+└─────────────────────────────────────────┘
+
+4.2 Toolbar (Top Bar)
+
+4.3 Preview Panel
+Remotion <Player> centred with black letterbox background
+Aspect ratio preserved — player never stretches
+Playback controls below the player (custom, not browser native)
+Frame counter shows current frame and total frames
+Clicking on the preview canvas while an overlay is selected shows resize/move handles for that overlay
+4.4 Properties Panel (Right Sidebar)
+Context-sensitive. Shows different controls depending on what is selected:
+
+4.5 Timeline Panel
+Fixed height region at the bottom, user-resizable by dragging the top edge
+Left column: track labels ("Video", "Audio", "Overlays", "Effects") with mute/lock icons
+Right: scrollable horizontal track lanes
+Track heights: Video 64px, Audio 48px, Overlays 40px, Effects 40px
+Clips rendered as rounded rectangles with clip name and thumbnail frame (video clips only)
+Audio clips show waveform SVG inside the clip block
+Overlay/effect clips show their type icon + label
+Playhead is a vertical red line spanning all track lanes
+Time ruler shows ticks every 1s (or every 10 frames when zoomed in)
+Horizontal scroll: drag the timeline body or use the scroll bar at the bottom
+
+
+5. Export & Rendering
+5.1 Export Flow (User Perspective)
+User clicks Export in the toolbar
+Export modal opens showing: resolution (source / 1080p / 720p / 480p), format (MP4 / GIF), quality (high / medium / low), estimated file size
+User clicks "Render & Export"
+Progress bar shows render progress (frame X of Y)
+On completion: "Download MP4" button + "Copy shareable link" button
+
+5.2 Rendering Strategy
+
+5.3 Lambda Setup Requirements
+Deploy a Remotion Lambda function to AWS (us-east-1 recommended for Cloudflare R2 compatibility)
+Store REMOTION_AWS_ACCESS_KEY_ID and REMOTION_AWS_SECRET_ACCESS_KEY as Vercel env vars
+Output bucket should be the same Cloudflare R2 bucket used for recording storage (or a separate renders/ prefix)
+Site deployed to S3 via npx remotion lambda sites create for the Lambda renderer to access the composition
+Each render job creates a record in Supabase renders table with status (queued / rendering / done / failed), progress, and output URL
+Poll render status every 2 seconds from the frontend using Supabase real-time or a simple polling hook
+5.4 Renders Table (Supabase)
+CREATE TABLE renders (
+  id            TEXT PRIMARY KEY,  -- nanoid
+  recording_id  TEXT NOT NULL REFERENCES recordings(id),
+  user_id       TEXT,
+  status        TEXT NOT NULL DEFAULT 'queued',
+  progress      INTEGER DEFAULT 0,   -- 0–100
+  output_url    TEXT,                -- R2 URL when done
+  error         TEXT,
+  resolution    TEXT NOT NULL,       -- "1920x1080"
+  format        TEXT NOT NULL,       -- "mp4" | "gif"
+  duration_sec  REAL,
+  file_size     INTEGER,
+  composition   JSONB NOT NULL,      -- CompositionProps snapshot
+  created_at    TIMESTAMPTZ DEFAULT NOW(),
+  completed_at  TIMESTAMPTZ
+);
+
+
+6. File & Folder Structure
+vibecam/
+  ├─ app/
+  │   ├─ edit/[id]/page.tsx          ← Editor route
+  │   ├─ api/render/route.ts          ← Trigger Remotion Lambda render
+  │   ├─ api/render/[id]/route.ts     ← Poll render status
+  │   └─ api/upload/route.ts          ← Get signed R2 upload URL
+  ├─ remotion/
+  │   ├─ VibeCamComposition.tsx       ← Root composition
+  │   ├─ VideoClip.tsx                ← Renders a single video segment
+  │   ├─ overlays/
+  │   │   ├─ TextOverlay.tsx          ← Animated text
+  │   │   ├─ ShapeOverlay.tsx         ← Rectangles, circles, arrows
+  │   │   ├─ ZoomPanEffect.tsx        ← Zoom + pan using interpolate()
+  │   │   ├─ BlurOverlay.tsx          ← Gaussian blur region
+  │   │   ├─ CursorHighlight.tsx      ← Cursor click ripple
+  │   │   └─ CaptionOverlay.tsx       ← (v2) Whisper transcript captions
+  │   ├─ sequences/
+  │   │   ├─ intros/
+  │   │   │   ├─ DarkMinimalIntro.tsx
+  │   │   │   └─ GradientBurstIntro.tsx
+  │   │   └─ outros/
+  │   │       └─ CallToActionOutro.tsx
+  │   └─ index.ts                     ← registerRoot() call
+  ├─ components/editor/
+  │   ├─ EditorLayout.tsx             ← Grid layout wrapper
+  │   ├─ Toolbar.tsx                  ← Top bar
+  │   ├─ PreviewPanel.tsx             ← Remotion Player + controls
+  │   ├─ PropertiesPanel.tsx          ← Right sidebar (context-aware)
+  │   ├─ timeline/
+  │   │   ├─ TimelinePanel.tsx        ← Outer container + scroll
+  │   │   ├─ TimeRuler.tsx            ← Tick marks + timecodes
+  │   │   ├─ TrackLane.tsx            ← Single horizontal track
+  │   │   ├─ ClipBlock.tsx            ← Draggable clip rectangle
+  │   │   ├─ Playhead.tsx             ← Vertical red line
+  │   │   └─ WaveformRenderer.tsx     ← SVG audio waveform
+  │   ├─ overlays-ui/
+  │   │   ├─ TextOverlayEditor.tsx   ← Canvas handles for text
+  │   │   └─ ZoomRegionPicker.tsx    ← Click to set zoom centre
+  │   └─ ExportModal.tsx              ← Export settings + progress
+  ├─ hooks/
+  │   ├─ useEditorKeyboard.ts         ← Global keyboard shortcut handler
+  │   ├─ useClipDrag.ts               ← Drag logic for clip blocks
+  │   ├─ useTimelineZoom.ts           ← Zoom + scroll state
+  │   ├─ useRenderStatus.ts           ← Poll Supabase for render progress
+  │   └─ useWaveform.ts               ← Decode audio buffer → SVG path
+  ├─ store/
+  │   └─ useEditorStore.ts            ← Zustand store (see Section 3.3)
+  └─ lib/
+      ├─ remotion-utils.ts            ← Frame ↔ time helpers, fps constants
+      └─ render.ts                    ← API calls to trigger/poll renders
+
+
+7. Required Packages
+
+
+8. Recommended Build Order
+Build in this exact sequence. Each step is independently testable before moving to the next.
+Phase 1 — Foundation (Days 1–2)
+Set up Remotion inside the Next.js app: install packages, create remotion/index.ts with registerRoot(), create a stub VibeCamComposition that renders a single <Video> component
+Embed @remotion/player in the PreviewPanel with a hardcoded video src to verify it renders
+Create the Zustand editor store with CompositionProps as the state shape
+Wire Player inputProps to the Zustand store so any state change re-renders the preview
+Build the basic 3-panel layout grid (toolbar, preview, properties, timeline)
+Phase 2 — Timeline (Days 3–5)
+Build TimeRuler with correct tick marks based on fps and zoom level
+Build TrackLane and ClipBlock with visual-only rendering (no drag yet)
+Add Playhead and wire it to player currentTime via onTimeUpdate callback
+Implement timeline click-to-seek
+Add @dnd-kit drag to ClipBlock for repositioning clips
+Implement trim handles on clip edges
+Implement split clip (S key) using playhead position
+Implement delete clip (Delete key)
+Add undo/redo (history array in Zustand)
+Add keyboard shortcuts via hotkeys-js
+Phase 3 — Overlays (Days 6–8)
+Build TextOverlay Remotion component with spring entrance animation
+Build overlay block on timeline (same ClipBlock, different colour + icon)
+Build Properties panel for text overlay (font, size, colour, animation)
+Build ZoomPanEffect Remotion component using interpolate() and spring()
+Build zoom region picker (click on preview to set zoom centre)
+Build BlurOverlay using CSS filter inside AbsoluteFill
+Build ShapeOverlay (rectangle, circle, arrow)
+Phase 4 — Audio (Days 9–10)
+Use @remotion/media-utils getAudioData to decode recording audio
+Build WaveformRenderer: decode → downsample → render as SVG path inside ClipBlock
+Implement volume envelope (gain points on audio clip)
+Implement fade in/fade out handles
+Add background music track: upload audio file → new AudioTrack in store
+Phase 5 — Intro / Outro (Day 11)
+Build DarkMinimalIntro and GradientBurstIntro Remotion compositions
+Build CallToActionOutro composition
+Add "Add Intro" / "Add Outro" buttons to toolbar
+Build Intro/Outro properties panel (title, subtitle, style, duration)
+Phase 6 — Export (Days 12–14)
+Build ExportModal with resolution, format, quality options
+Create /api/render POST route that calls renderMediaOnLambda()
+Create /api/render/[id] GET route that returns render status from Supabase
+Build useRenderStatus hook that polls the status route
+Show progress bar in ExportModal during render
+On render complete: show download link + shareable link
+Phase 7 — Polish (Days 15–16)
+Timeline zoom (pinch + buttons)
+Speed ramping UI and Remotion frame mapping
+Cursor highlight and cursor hide effects
+Mobile/small screen graceful fallback message (editor requires desktop)
+Error states, loading states, and empty states for all panels
+Performance: memoize heavy components, use React.memo on ClipBlock, use useMemo for waveform path calculation
+
+
+9. Critical Implementation Notes for Antigravity
+Must-know Remotion specifics
+useCurrentFrame() only works inside a Remotion composition tree — not in regular React components. Never call it outside a Remotion <Composition> or <Player>.
+The Remotion Player is a client-side component. Add "use client" to PreviewPanel.tsx. If using Next.js App Router, wrap the Player in a dynamic import with ssr: false.
+Remotion uses a concept of "durationInFrames" not seconds. All timing in CompositionProps must be stored in frames. Use a helper: const toFrames = (sec, fps) => Math.round(sec * fps). Store fps in the Zustand store; default to 30.
+interpolate() clamps by default (extrapolateLeft/Right: "clamp"). For zoom effects, always use extrapolateLeft: "clamp", extrapolateRight: "clamp" to prevent values going out of bounds.
+spring() in Remotion is frame-based, not time-based. It takes { frame, fps, config } not a duration. For consistent animations across different fps values, always pass fps from the store.
+Video sources inside a Remotion composition must be accessible URLs. For local recordings in v1 (ObjectURL), create a temporary Blob URL and pass it. For cloud recordings, pass the R2 CDN URL directly.
+@remotion/player does not support seeking to a specific frame imperatively via ref in older versions. Use the playerRef.current.seekTo(frame) method added in Remotion 4. Ensure the package is v4+.
+When using Lambda rendering, the Remotion site (the webpack bundle of your compositions) must be deployed separately with npx remotion lambda sites create. The site URL is passed to renderMediaOnLambda as serveUrl. This is a one-time deploy step; update it when compositions change.
+Performance rules
+Wrap ClipBlock in React.memo with a custom comparator that only re-renders when the clip's own data changes. Without this, dragging the playhead re-renders every clip on every frame.
+Waveform SVG path calculation is expensive. Compute it once in useWaveform() with useMemo and cache by clip src URL.
+The Properties Panel re-renders on every store change. Use Zustand's selector pattern: const selectedClip = useEditorStore(s => s.compositionProps.clips.find(c => c.id === s.selectedClipId)) to subscribe only to relevant state.
+Do not put the full history[] array in a single Zustand subscription — this causes re-renders on every undo. Keep history in a separate slice or use a ref.
+Design rules
+All editor UI must use the VibeCam design system: --bg #0A0A0B, --surface #111113, --accent #E8FF47, Syne font for labels, Geist Mono for timecodes and values.
+The timeline is always dark. No light mode. This is a creative tool and dark mode is the only mode.
+All interactive controls (drag handles, clip blocks, toolbar buttons) must have a clear focus ring for keyboard navigation accessibility.
+Every panel resize must be smooth. Use CSS transitions or Framer Motion for layout animations. Janky panel snapping destroys the professional feel.
+Export button must always be visible and never disabled. If the user clicks Export with an empty composition, show a helpful error in the modal, not a disabled button state.
+Do not build (out of scope for this sprint)
+Multi-user / collaborative editing
+Version history / recording revision system
+Custom font upload
+Video transitions between clips (crossfade, wipe) — flag for v3
+Mobile editor (responsive editing UI) — show a "use desktop" message on viewports < 1024px
+AI-powered editing suggestions
+Captions / Whisper transcription — architecture for it, but no UI yet
+
+
+10. Definition of Done
+This sprint is complete when all of the following are true:
+A user can open an existing VibeCam recording in the editor at /edit/[id]
+The Remotion Player renders the recording with correct playback
+The timeline shows the video clip and the user can trim, split, and delete clips
+The user can add a text overlay, position it in the frame, set its duration on the timeline, and see it in the preview
+The user can add a zoom effect to any portion of the video and see it animate in the preview
+The user can add a blur/redaction region to any portion of the video
+The user can add an intro sequence with a custom title
+All keyboard shortcuts in Section 2.1 work correctly
+Undo and redo work for all mutation actions
+The user can click Export, see a progress bar, and receive a downloadable MP4 link
+The exported MP4 includes all edits: clips, overlays, zoom effects, intro
+The editor feels fast: no visible lag when dragging the playhead or moving clips
+
+Ship the timeline first. Everything else is an overlay on top of a working timeline.
+The zoom effect and text overlays are the two features users will demo in their first five minutes. Make those two feel magical and the rest will follow.
+--- TABLE ---
+Shortcut | Action
+Space | Play / Pause
+J | Rewind (hold for 2x speed)
+K | Pause and go to previous frame
+L | Fast forward (hold for 2x speed)
+I | Set in point (trim start) to current frame
+O | Set out point (trim end) to current frame
+S | Split clip at playhead
+Delete / Backspace | Delete selected clip
+Cmd/Ctrl + Z | Undo
+Cmd/Ctrl + Shift + Z | Redo
+Cmd/Ctrl + D | Duplicate selected clip
+[ / ] | Jump to start / end of selected clip
+Left / Right arrow | Step one frame backward / forward
+Shift + Left/Right | Step 10 frames backward / forward
+Cmd/Ctrl + A | Select all clips
+Escape | Deselect all
+E | Export / render
+--- TABLE ---
+Type | Key fields | Notes
+VideoClip | id, src, startFrame, durationInFrames, trimFrom, trimTo, speed, volume | One block per cut on the video track
+Overlay | id, type (text|shape|blur|zoom|cursor), startFrame, durationInFrames, props | Polymorphic — props differ by type
+Effect | id, type (zoomPan|blur|speedRamp), startFrame, durationInFrames, config | Applied on top of video layer
+AudioTrack | id, src, startFrame, durationInFrames, volume, gainPoints, fadeIn, fadeOut | Supports multiple audio layers
+IntroConfig | style, title, subtitle, durationFrames, colours | Selects which intro component to render
+OutroConfig | style, ctaText, ctaUrl, durationFrames | Selects which outro component to render
+CompositionProps | clips, overlays, effects, audioTracks, intro, outro, fps, width, height | Root props passed to @remotion/player and to render function
+--- TABLE ---
+Zone | Contents
+Left | VibeCam logo + back arrow (← Back to Dashboard)
+Centre-left | Undo, Redo, | Split, Delete, | Speed, Zoom-in, Blur buttons
+Centre | Recording title (editable inline, click to rename)
+Centre-right | Add Text, Add Shape, Add Music buttons
+Right | Preview quality toggle (Full / Half / Quarter), | Export button (accent colour)
+--- TABLE ---
+Selection state | Properties panel shows
+Nothing selected | Composition settings: FPS, resolution, background colour
+Video clip selected | Speed, volume, colour grading (brightness/contrast/saturation sliders)
+Text overlay selected | Font, size, weight, colour, alignment, background, entrance/exit animation
+Shape overlay selected | Fill colour, stroke, opacity, corner radius
+Zoom effect selected | Zoom level, centre point picker, easing
+Blur overlay selected | Blur radius, region dimensions
+Intro selected | Style, title, subtitle, duration, colours
+Outro selected | Style, CTA text, CTA URL, duration
+--- TABLE ---
+Strategy | When to use | How
+Remotion Lambda (recommended) | Production — cloud render | Call @remotion/lambda renderMediaOnLambda() with compositionProps as inputProps. Returns S3/R2 URL. Fast, scalable, no server timeout issues.
+Remotion SSR (server) | Self-hosted fallback | Call renderMedia() in a Next.js API route or a long-running worker. Risk: long timeout on Vercel (60s). Use only for short clips.
+@remotion/renderer WASM (client) | v1 fallback / offline | Runs in the browser, no server needed. Slow for long clips. Good for short clips or offline-first. Marked as v3.
+--- TABLE ---
+Package | Version | Purpose
+remotion | ^4.0 | Core Remotion — Sequence, AbsoluteFill, interpolate, spring, useCurrentFrame
+@remotion/player | ^4.0 | React Player component for in-browser preview
+@remotion/lambda | ^4.0 | Cloud rendering via AWS Lambda
+@remotion/renderer | ^4.0 | Server-side rendering for API route fallback
+@remotion/media-utils | ^4.0 | getAudioData, visualizeAudio for waveform
+zustand | ^4 | Global editor state store
+immer | ^10 | Immutable state updates inside Zustand
+@dnd-kit/core | ^6 | Accessible drag-and-drop for clip blocks and overlays
+@dnd-kit/sortable | ^7 | Sortable clip lists
+framer-motion | ^11 | UI animations (panel transitions, modal opens)
+react-colorful | ^5 | Lightweight headless colour picker
+react-resizable-panels | ^2 | Resizable preview/properties/timeline panels
+nanoid | ^5 | Generate unique IDs for clips and overlays
+hotkeys-js | ^3 | Keyboard shortcut management

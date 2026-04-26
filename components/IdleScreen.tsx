@@ -1,20 +1,29 @@
-import { useAppStore, CamPosition } from '@/store/useAppStore';
+import { useState } from 'react';
 import { useRecorder } from '@/hooks/useRecorder';
-import { Mic, MicOff, Video, VideoOff } from 'lucide-react';
-
-const positions: { value: CamPosition; label: string }[] = [
-  { value: 'top-left', label: 'TL' },
-  { value: 'top-right', label: 'TR' },
-  { value: 'bottom-left', label: 'BL' },
-  { value: 'bottom-right', label: 'BR' },
-];
+import { Video } from 'lucide-react';
+import { PreRecordingModal } from './PreRecordingModal';
 
 export function IdleScreen() {
-  const { useMic, useCamera, toggleMic, toggleCamera, camPosition, setCamPosition } = useAppStore();
   const { startRecording } = useRecorder();
+  const [modalMode, setModalMode] = useState<'recording' | 'video' | null>(null);
+
+  const handleOpenModal = (mode: 'recording' | 'video') => {
+    setModalMode(mode);
+  };
+
+  const handleStart = async () => {
+    if (modalMode) {
+      try {
+        await startRecording(modalMode);
+        setModalMode(null);
+      } catch (err) {
+        console.error("Failed to start recording:", err);
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 pt-24 md:pt-32 animate-fade-in">
+    <div className="flex-grow flex flex-col items-center justify-around p-6 pt-28 pb-12 animate-fade-in">
       <div className="max-w-xl w-full text-center space-y-8">
         <div className="space-y-4">
           <h2 className="font-syne text-5xl md:text-7xl font-bold tracking-tight text-text">
@@ -25,55 +34,32 @@ export function IdleScreen() {
           </p>
         </div>
 
-        <button
-          onClick={startRecording}
-          className="w-full sm:w-auto px-10 py-4 bg-accent text-surface font-syne font-bold text-lg rounded-full hover:bg-white transition-colors duration-200 shadow-[0_0_40px_var(--color-accent-dim)]"
-        >
-          Start Recording
-        </button>
-
-        <div className="flex items-center justify-center gap-4 pt-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
           <button
-            onClick={toggleMic}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${useMic ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
-              } border border-transparent hover:border-border`}
+            onClick={() => handleOpenModal('recording')}
+            className="w-full sm:w-auto px-10 py-4 bg-accent text-surface font-syne font-bold text-lg rounded-2xl hover:bg-white transition-all shadow-xl shadow-accent/20 group flex items-center justify-center gap-2"
           >
-            {useMic ? <Mic size={16} /> : <MicOff size={16} />}
-            Mic {useMic ? 'ON' : 'OFF'}
+            <Video size={20} className="group-hover:scale-110 transition-transform" />
+            Start Recording
           </button>
-          <button
-            onClick={toggleCamera}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm transition-colors ${useCamera ? 'bg-surface border-border text-accent' : 'bg-transparent text-muted hover:text-text'
-              } border border-transparent hover:border-border`}
-          >
-            {useCamera ? <Video size={16} /> : <VideoOff size={16} />}
-            Cam {useCamera ? 'ON' : 'OFF'}
-          </button>
-        </div>
 
-        {/* Camera position picker — only visible when camera is ON */}
-        {useCamera && (
-          <div className="flex flex-col items-center gap-3 animate-fade-in">
-            <span className="font-mono text-xs text-muted">Camera position</span>
-            <div className="grid grid-cols-2 gap-1.5 w-20 h-20 p-2 bg-surface border border-border rounded-xl">
-              {positions.map((pos) => (
-                <button
-                  key={pos.value}
-                  onClick={() => setCamPosition(pos.value)}
-                  className={`rounded-md text-[10px] font-mono font-bold transition-all ${camPosition === pos.value
-                    ? 'bg-accent text-surface scale-105'
-                    : 'bg-black/30 text-muted hover:bg-black/50 hover:text-text'
-                    }`}
-                  title={pos.value}
-                >
-                  {pos.label}
-                </button>
-              ))}
+          <div className="relative group/video-only w-full sm:w-auto">
+            <button
+              onClick={() => handleOpenModal('video')}
+              className="w-full sm:w-auto px-10 py-4 bg-surface border border-border text-text font-syne font-bold text-lg rounded-2xl hover:border-accent hover:text-accent transition-all flex items-center justify-center gap-2"
+            >
+              Record Video Only
+            </button>
+            {/* Hover Description Tooltip */}
+            <div className="absolute -bottom-14 left-1/2 -translate-x-1/2 w-48 bg-surface border border-border p-2 rounded-lg shadow-xl opacity-0 translate-y-2 pointer-events-none group-hover/video-only:opacity-100 group-hover/video-only:translate-y-0 transition-all z-10">
+               <p className="font-mono text-[10px] text-muted leading-tight">
+                  Record just yourself using the webcam. No screen sharing.
+               </p>
             </div>
           </div>
-        )}
+        </div>
 
-        <div className="pt-8 font-mono text-xs text-muted">
+        <div className="pt-12 font-mono text-xs text-muted">
           Built by{' '}
           <a
             href="https://linkedin.com/in/himanshusah"
@@ -86,6 +72,14 @@ export function IdleScreen() {
           ! 👋
         </div>
       </div>
+
+      {modalMode && (
+        <PreRecordingModal 
+          mode={modalMode} 
+          onClose={() => setModalMode(null)} 
+          onConfirm={handleStart} 
+        />
+      )}
     </div>
   );
 }

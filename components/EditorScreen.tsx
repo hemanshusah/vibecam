@@ -7,7 +7,12 @@ import { formatTime } from '@/lib/format';
 import { Share, Trash2, Play, Download, Pencil } from 'lucide-react';
 import { ShareModal } from './ShareModal';
 import { AuthModal } from './AuthModal';
+import { Watermark } from './Watermark';
 
+/**
+ * EditorScreen (V1)
+ * Provides simple trimming and uploading for raw recordings.
+ */
 export function EditorScreen() {
   const { recordedUrl, recordedBlob, useMic, useCamera, trimStart, trimEnd, setTrim, discard, shareUrl, setShareUrl, setShareModalOpen, shareModalOpen } = useAppStore();
   const { saveRecording } = useStorage();
@@ -107,6 +112,7 @@ export function EditorScreen() {
         hasCamera: useCamera,
         blob: recordedBlob,
         userId: user.id,
+        tag: useAppStore.getState().recordedMode,
       });
 
       if (newId) {
@@ -156,7 +162,7 @@ export function EditorScreen() {
   if (!recordedUrl) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 pt-24 md:pt-32 space-y-8 animate-fade-in pb-32">
+    <div className="flex-grow flex flex-col items-center justify-center p-6 pt-24 md:pt-32 space-y-8 animate-fade-in pb-32">
       
       {/* Top Bar */}
       <div className="w-full max-w-5xl flex flex-wrap justify-between items-center mb-4 gap-4">
@@ -202,6 +208,7 @@ export function EditorScreen() {
           className="w-full h-full object-contain"
           onClick={togglePlayback}
         />
+        <Watermark />
         
         {/* Simple inline native-like play button layer */}
         <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
