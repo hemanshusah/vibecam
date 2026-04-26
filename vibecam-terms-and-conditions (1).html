@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms &amp; Conditions — VibeCam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0A0A0B; --surface:#111113; --border:#1E1E22; --border-light:#2A2A2F;
+    --text:#F0F0F2; --muted:#9B9BA5; --dim:#6B6B75;
+    --accent:#E8FF47; --accent-dim:rgba(232,255,71,.10); --accent-border:rgba(232,255,71,.25);
+    --radius:12px; --sans:'Syne',Arial,sans-serif; --mono:'Geist Mono','Courier New',monospace; --max:780px;
+  }
+  html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.022;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  header { position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); background:rgba(10,10,11,.93); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  .header-inner { max-width:var(--max); margin:0 auto; padding:18px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { display:flex; align-items:center; gap:9px; font-weight:700; font-size:16px; color:var(--text); text-decoration:none; letter-spacing:-0.02em; }
+  .logo-dot { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .doc-badge { font-family:var(--mono); font-size:11px; color:var(--dim); border:1px solid var(--border-light); padding:4px 10px; border-radius:6px; letter-spacing:.04em; }
+
+  .hero { max-width:var(--max); margin:0 auto; padding:64px 24px 48px; border-bottom:1px solid var(--border); }
+  .hero-eyebrow { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; }
+  .hero h1 { font-size:clamp(32px,6vw,52px); font-weight:700; letter-spacing:-.035em; line-height:1.06; margin-bottom:16px; }
+  .version-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .vbadge { font-family:var(--mono); font-size:11px; color:var(--dim); background:var(--surface); border:1px solid var(--border-light); padding:4px 10px; border-radius:6px; }
+  .vbadge.new { color:var(--accent); border-color:var(--accent-border); background:var(--accent-dim); }
+  .hero-meta { display:flex; flex-wrap:wrap; gap:16px; font-family:var(--mono); font-size:12px; color:var(--dim); }
+  .hero-meta span { display:flex; align-items:center; gap:6px; }
+  .hero-meta span::before { content:''; width:4px; height:4px; background:var(--dim); border-radius:50%; }
+
+  .page-wrap { max-width:var(--max); margin:0 auto; padding:0 24px 100px; }
+
+  .toc { margin:44px 0; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:var(--radius); padding:24px 28px; }
+  .toc-title { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:16px; }
+  .toc ol { list-style:none; counter-reset:toc; display:grid; grid-template-columns:1fr 1fr; gap:7px 28px; }
+  .toc li { counter-increment:toc; font-size:13px; color:var(--muted); }
+  .toc li::before { content:counter(toc,decimal-leading-zero) ".  "; font-family:var(--mono); font-size:11px; color:var(--dim); }
+  .toc li a { color:var(--muted); text-decoration:none; transition:color .15s; }
+  .toc li a:hover { color:var(--accent); }
+
+  .callout { border-radius:var(--radius); padding:20px 24px; margin:24px 0; }
+  .callout.accent { background:var(--accent-dim); border:1px solid var(--accent-border); }
+  .callout.warn   { background:rgba(255,69,69,.07); border:1px solid rgba(255,69,69,.22); }
+  .callout.info   { background:rgba(100,160,255,.07); border:1px solid rgba(100,160,255,.2); }
+  .callout.neutral{ background:var(--surface); border:1px solid var(--border-light); }
+  .callout-label { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .callout.warn .callout-label { color:#FF4545; }
+  .callout.info .callout-label { color:#6AB4FF; }
+  .callout p { font-size:14px; color:var(--muted); line-height:1.72; margin:0; }
+
+  .section { margin-top:60px; padding-top:8px; }
+  .section-number { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.08em; margin-bottom:10px; }
+  .section h2 { font-size:22px; font-weight:700; letter-spacing:-.025em; line-height:1.2; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .section h3 { font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--text); margin:30px 0 10px; }
+  .section p { font-size:15px; color:var(--muted); line-height:1.78; margin-bottom:14px; }
+  .section p:last-child { margin-bottom:0; }
+  .section ul,.section ol { margin:12px 0 16px; padding-left:0; list-style:none; }
+  .section ul li,.section ol li { font-size:15px; color:var(--muted); line-height:1.72; padding:5px 0 5px 24px; position:relative; }
+  .section ul li::before { content:''; position:absolute; left:5px; top:14px; width:5px; height:5px; background:var(--accent); border-radius:50%; }
+  .section ol { counter-reset:ol; }
+  .section ol li { counter-increment:ol; }
+  .section ol li::before { content:counter(ol)"."; position:absolute; left:0; font-family:var(--mono); font-size:12px; color:var(--accent); top:6px; }
+
+  .data-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:13px; }
+  .data-table th { background:var(--surface); color:var(--text); font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; padding:10px 14px; text-align:left; border:1px solid var(--border); }
+  .data-table td { padding:10px 14px; border:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.6; }
+  .data-table tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+
+  .contact-card { background:var(--surface); border:1px solid var(--border-light); border-radius:var(--radius); padding:24px 28px; margin-top:24px; }
+  .contact-card p { font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .contact-card p:last-child { margin-bottom:0; }
+  .contact-card a { color:var(--accent); text-decoration:none; }
+
+  footer { border-top:1px solid var(--border); margin-top:80px; }
+  .footer-inner { max-width:var(--max); margin:0 auto; padding:28px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .footer-inner p { font-family:var(--mono); font-size:11px; color:var(--dim); }
+  .footer-links { display:flex; gap:20px; }
+  .footer-links a { font-family:var(--mono); font-size:11px; color:var(--dim); text-decoration:none; transition:color .15s; }
+  .footer-links a:hover,.footer-links a.active { color:var(--accent); }
+
+  @media (max-width:600px) { .toc ol{grid-template-columns:1fr} .hero{padding:40px 16px 32px} .page-wrap{padding:0 16px 60px} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo"><div class="logo-dot"></div>VibeCam</a>
+    <div class="doc-badge">Terms &amp; Conditions</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Legal &middot; Terms</div>
+  <h1>Terms &amp; Conditions</h1>
+  <div class="version-row">
+    <span class="vbadge new">v2.0 &mdash; Updated 26 April 2025</span>
+    <span class="vbadge">Supersedes v1.0 (1 April 2025)</span>
+  </div>
+  <div class="hero-meta">
+    <span>Governing law: India</span>
+    <span>Payments: Razorpay &middot; &#8377; INR</span>
+    <span>Jurisdiction: Indian courts</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#t1">Agreement to terms</a></li>
+      <li><a href="#t2">The Service</a></li>
+      <li><a href="#t3">Eligibility &amp; accounts</a></li>
+      <li><a href="#t4">Screen recording rules</a></li>
+      <li><a href="#t5">Video editing &amp; exports</a></li>
+      <li><a href="#t6">Acceptable use</a></li>
+      <li><a href="#t7">Your content &amp; licence</a></li>
+      <li><a href="#t8">Sharing &amp; links</a></li>
+      <li><a href="#t9">Support Me payments (Razorpay)</a></li>
+      <li><a href="#t10">Consumer protection rights</a></li>
+      <li><a href="#t11">Intellectual property</a></li>
+      <li><a href="#t12">Disclaimer of warranties</a></li>
+      <li><a href="#t13">Limitation of liability</a></li>
+      <li><a href="#t14">Indemnification</a></li>
+      <li><a href="#t15">Termination</a></li>
+      <li><a href="#t16">Governing law &amp; disputes</a></li>
+      <li><a href="#t17">Changes to terms</a></li>
+      <li><a href="#t18">Contact &amp; grievance officer</a></li>
+    </ol>
+  </div>
+
+  <div class="callout accent">
+    <div class="callout-label">Plain-English Summary</div>
+    <p>Use VibeCam lawfully. Don&rsquo;t record people without consent where the law requires it. Don&rsquo;t share illegal content. Payments are processed by Razorpay in &#8377; INR &mdash; they are voluntary contributions, not purchases of a specific service level. We can suspend accounts that break these rules. These Terms are governed by Indian law.</p>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">What&rsquo;s New in v2.0</div>
+    <p>Section&nbsp;5 (Video Editing &amp; Exports) is new, covering Remotion-based editing, exported MP4s, and render job data. Section&nbsp;9 (Payments) is updated to reflect <strong>Razorpay</strong> as the payment processor and <strong>Indian Rupees (INR)</strong> as the billing currency, with UPI/RuPay/net banking references and Indian consumer law provisions. Section&nbsp;10 (Consumer Protection) is new, covering rights under the Consumer Protection Act, 2019. Section&nbsp;16 (Governing Law) is updated to Indian courts and the Arbitration and Conciliation Act, 1996.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="t1">
+    <div class="section-number">01</div>
+    <h2>Agreement to Terms</h2>
+    <p>These Terms and Conditions (&ldquo;Terms&rdquo;) govern your access to and use of VibeCam (&ldquo;VibeCam&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;), including our website, web application, video editor, and any related services (collectively, the &ldquo;Service&rdquo;).</p>
+    <p>By accessing or using the Service &mdash; including by recording, editing, exporting, sharing, or watching a VibeCam recording &mdash; you agree to be bound by these Terms and our <a href="vibecam-privacy-policy.html" style="color:var(--accent);">Privacy Policy</a>. If you do not agree, do not use the Service.</p>
+    <p>If you use the Service on behalf of an organisation, you represent that you have authority to bind that organisation to these Terms, and that organisation accepts these Terms.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="t2">
+    <div class="section-number">02</div>
+    <h2>The Service</h2>
+    <p>VibeCam provides a browser-based screen recording and video editing platform that allows users to:</p>
+    <ul>
+      <li>Capture their screen, browser tab, or application window using native browser APIs</li>
+      <li>Optionally capture microphone audio and/or camera video</li>
+      <li>Edit recordings using a Remotion-powered timeline editor (trimming, splitting, overlays, zoom effects, blur/redaction, text annotations, speed ramping, intro/outro sequences, audio mixing)</li>
+      <li>Export a final rendered MP4 video via cloud rendering</li>
+      <li>Generate shareable links to recordings and exports</li>
+      <li>Make optional voluntary &ldquo;Support Me&rdquo; contributions via Razorpay in INR</li>
+    </ul>
+    <p>The Service is provided &ldquo;as is&rdquo; and may be updated, modified, or discontinued at any time. We will make reasonable efforts to provide advance notice of material changes.</p>
+    <h3>No account required for basic recording (v1)</h3>
+    <p>Basic recording and local storage does not require an account. Cloud storage, the Remotion editor, exports, and payment features require an account.</p>
+    <h3>Beta features</h3>
+    <p>Features marked &ldquo;beta&rdquo; or &ldquo;coming soon&rdquo; are provided without warranty and may change or be removed at any time.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="t3">
+    <div class="section-number">03</div>
+    <h2>Eligibility &amp; Accounts</h2>
+    <p>You must be at least <strong>18 years old</strong> (consistent with Indian majority law under the Indian Majority Act, 1875) to create an account or make a payment. By using the Service you confirm you meet this requirement. For users between 13 and 17, use is permitted only under parental supervision and without making payments.</p>
+    <h3>Account security</h3>
+    <p>You are responsible for maintaining the confidentiality of your login credentials. You agree to notify us immediately of any unauthorised access to your account. VibeCam is not liable for any loss arising from unauthorised use of your account where you have failed to keep credentials secure.</p>
+    <h3>Accurate information</h3>
+    <p>You agree to provide accurate, current, and complete information when creating an account and making payments, and to keep that information updated. Providing false information (including a false name or address for billing) may result in account suspension.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="t4">
+    <div class="section-number">04</div>
+    <h2>Screen Recording Rules</h2>
+    <div class="callout warn">
+      <div class="callout-label">Critical &mdash; Your Legal Responsibility</div>
+      <p>Recording other people&rsquo;s screens, calls, or communications without their knowledge or consent may violate Indian law (including Section&nbsp;66E of the IT Act, 2000 and applicable state-level privacy provisions) and the laws of other jurisdictions. You are solely and entirely responsible for ensuring your recordings comply with all applicable laws. VibeCam provides a tool &mdash; legal responsibility for how you use it rests with you.</p>
+    </div>
+    <h3>You must not use VibeCam to record:</h3>
+    <ul>
+      <li>Any person without their knowledge and consent where required by law</li>
+      <li>Private communications, phone calls, or video meetings without informing all participants</li>
+      <li>Content you do not have the right to capture (e.g. DRM-protected streaming content)</li>
+      <li>Personal data of others without a lawful basis under the DPDP Act 2023 or applicable law</li>
+      <li>Confidential business information you are not authorised to disclose</li>
+      <li>Minors without the explicit consent of their parent or legal guardian</li>
+    </ul>
+    <h3>Consent requirements</h3>
+    <p>Under Indian law, recording a private conversation without the consent of the parties may constitute a violation of their right to privacy (Article 21 of the Constitution of India as interpreted in <em>K.S. Puttaswamy v. Union of India</em>, 2017) and may attract civil or criminal liability. It is your responsibility to obtain all necessary consents before recording.</p>
+    <h3>Workplace recordings</h3>
+    <p>If using VibeCam in a workplace context, ensure your recordings comply with your employer&rsquo;s policies, employment contracts, and applicable Indian labour and privacy law. VibeCam is not responsible for how recordings are used in employment or professional contexts.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="t5">
+    <div class="section-number">05</div>
+    <h2>Video Editing &amp; Exports</h2>
+    <p>VibeCam&rsquo;s Remotion-powered video editor allows you to edit your recordings using a multi-track timeline. By using the editor, you agree to the following:</p>
+    <h3>Editing responsibility</h3>
+    <p>You are solely responsible for the content of your edited videos, including any text overlays, annotations, zoom effects, blur/redaction choices, intro/outro sequences, and background music you add. VibeCam does not review edited content before export.</p>
+    <h3>Background music and third-party audio</h3>
+    <p>If you upload background music or audio to add to your recording, you represent and warrant that you have the necessary rights, licences, or permissions to use that audio in your video. VibeCam does not provide a music library. Uploading copyrighted music without a licence is your sole responsibility and may expose you to legal liability.</p>
+    <h3>Exported MP4 files</h3>
+    <p>Exported MP4 files are stored on Cloudflare R2 for 90 days from the export date, after which they are automatically deleted. You are responsible for downloading and retaining your own copies. VibeCam is not liable for loss of exported files after the 90-day period or due to technical failures.</p>
+    <h3>Render compute</h3>
+    <p>Rendering is performed via cloud infrastructure (Remotion Lambda). We reserve the right to limit render duration, resolution, or frequency for free-tier users as part of fair use controls. Render limits, if introduced, will be communicated clearly in the app before they apply to your account.</p>
+    <h3>No guarantee of render completion</h3>
+    <p>While we make reasonable efforts to complete every render job, render failures may occur due to infrastructure issues, overly large files, or unsupported media formats. In the event of a render failure, we will notify you and no charges will be levied for failed renders.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="t6">
+    <div class="section-number">06</div>
+    <h2>Acceptable Use Policy</h2>
+    <p>You agree not to use the Service to create, upload, edit, store, or share content that:</p>
+    <ul>
+      <li>Is illegal under applicable Indian law or any other law, or facilitates illegal activity</li>
+      <li>Infringes the copyright, trademark, patent, trade secret, or other intellectual property rights of any third party</li>
+      <li>Constitutes or depicts child sexual abuse material (CSAM) &mdash; violations will be reported to NCMEC, CBI, and relevant Indian authorities immediately and without notice</li>
+      <li>Contains malware, ransomware, viruses, or other harmful code</li>
+      <li>Harasses, threatens, intimidates, defames, or discriminates against any individual or group</li>
+      <li>Constitutes unsolicited bulk communications (spam)</li>
+      <li>Impersonates VibeCam, any other person, or any entity in a misleading manner</li>
+      <li>Violates any person&rsquo;s right to privacy under Indian law or any applicable jurisdiction</li>
+      <li>Promotes or glorifies violence, terrorism, religious or communal hatred, or is otherwise contrary to national integrity of India</li>
+      <li>Constitutes non-consensual intimate imagery (&ldquo;revenge porn&rdquo;) &mdash; which is a criminal offence under Section&nbsp;66E and Section&nbsp;67A of the IT Act, 2000</li>
+    </ul>
+    <h3>Technical restrictions</h3>
+    <ul>
+      <li>Do not reverse-engineer, decompile, or disassemble any part of the Service.</li>
+      <li>Do not use automated means (bots, scrapers, crawlers) to access or collect data from the Service.</li>
+      <li>Do not circumvent or interfere with security features of the Service.</li>
+      <li>Do not use the Service to develop a competing product without our express written permission.</li>
+    </ul>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="t7">
+    <div class="section-number">07</div>
+    <h2>Your Content &amp; Licence</h2>
+    <h3>You own your recordings and editing projects</h3>
+    <p>You retain all ownership rights to recordings you create and editing projects you produce using VibeCam. We do not claim any ownership of your content.</p>
+    <h3>Licence to us</h3>
+    <p>By uploading a recording or saving an editing project to VibeCam&rsquo;s cloud storage, you grant VibeCam a limited, non-exclusive, royalty-free, worldwide licence to store, reproduce, process (including render via Remotion Lambda), and transmit your content solely to operate the Service &mdash; specifically, to store your recording, render your exported video, and deliver it to anyone you share the link with. This licence is strictly limited to operating the Service and terminates when you delete the content.</p>
+    <h3>No use for AI training</h3>
+    <p>We do not use your recordings, editing project data, or exported videos to train AI or machine learning models, and we will not do so without your explicit, separate, written consent.</p>
+    <h3>Your warranties</h3>
+    <p>By uploading content you represent and warrant that: (a) you own or have the necessary rights to the content; (b) the content does not infringe any third-party rights; and (c) the content complies with these Terms and applicable Indian law.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="t8">
+    <div class="section-number">08</div>
+    <h2>Sharing &amp; Links</h2>
+    <h3>Your responsibility</h3>
+    <p>When you generate a shareable link, you are responsible for who you share it with and for the consequences of that sharing. VibeCam links are secured with HTTPS but are not encrypted beyond that &mdash; treat them as accessible to anyone who has the URL.</p>
+    <h3>Link availability</h3>
+    <p>We do not guarantee permanent availability of shared links. Links may become unavailable if: your recording or export is deleted; your account is suspended; our infrastructure changes; or the recording expires per your chosen settings. Render exports auto-expire after 90 days.</p>
+    <h3>Reporting abusive content</h3>
+    <p>To report a VibeCam link containing content that violates these Terms or Indian law, email <a href="mailto:abuse@vibecam.app" style="color:var(--accent);">abuse@vibecam.app</a>. We will review and act within 36 hours for urgent reports (CSAM, threats of violence) and within 7 days for other reports, in line with IT Act intermediary obligations.</p>
+    <h3>Copyright / DMCA takedown</h3>
+    <p>To report copyright infringement, send a notice to <a href="mailto:legal@vibecam.app" style="color:var(--accent);">legal@vibecam.app</a> with: (a) identification of the copyrighted work; (b) identification of the infringing content and URL; (c) your contact information; (d) a statement of good faith belief; and (e) a statement of accuracy. We will act within 7 days of receiving a complete notice.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="t9">
+    <div class="section-number">09</div>
+    <h2>&ldquo;Support Me&rdquo; Payments via Razorpay</h2>
+    <div class="callout accent">
+      <div class="callout-label">Payment Processor &amp; Currency</div>
+      <p>All payments are processed by <strong>Razorpay Software Private Limited</strong> (CIN: U72200KA2013PTC097551), a PCI-DSS compliant payment gateway regulated by the Reserve Bank of India (RBI). All transactions are denominated in <strong>Indian Rupees (&#8377; INR)</strong>. VibeCam never handles, stores, or has access to your card number, CVV, UPI PIN, net banking credentials, or wallet login.</p>
+    </div>
+    <h3>Nature of payment</h3>
+    <p>&ldquo;Support Me&rdquo; contributions are entirely voluntary financial contributions to support VibeCam&rsquo;s ongoing development. They do not constitute a purchase of goods, a subscription to a specific service level, or a guarantee of any feature or uptime. Making a contribution does not create a contract for services beyond what VibeCam already provides free of charge.</p>
+    <h3>Supported payment methods</h3>
+    <ul>
+      <li>Credit and debit cards (Visa, Mastercard, RuPay, American Express)</li>
+      <li>UPI (Google Pay, PhonePe, Paytm UPI, BHIM, and all UPI-enabled apps)</li>
+      <li>Net banking (all major Indian banks)</li>
+      <li>Wallets (Paytm, Mobikwik, Freecharge, and others supported by Razorpay)</li>
+      <li>EMI (where available from your bank, subject to Razorpay and bank eligibility)</li>
+    </ul>
+    <h3>Pricing and currency</h3>
+    <p>All contribution amounts are displayed in Indian Rupees (&#8377; INR) including any applicable GST, before you confirm payment. The final amount debited is the amount shown at checkout. VibeCam is not responsible for any additional charges levied by your bank (e.g. foreign transaction fees if your card is internationally billed).</p>
+    <h3>Goods and Services Tax (GST)</h3>
+    <p>GST as applicable under the Goods and Services Tax Act, 2017 will be charged on contributions and shown clearly at checkout. A GST-compliant receipt/invoice will be sent to your billing email address following payment.</p>
+    <h3>Refund and cancellation policy</h3>
+    <p>As &ldquo;Support Me&rdquo; contributions are voluntary donations, they are generally non-refundable. However, in the following circumstances we will process a refund through Razorpay:</p>
+    <ul>
+      <li>Duplicate charge or technical error resulting in double payment</li>
+      <li>Payment captured but not authorised by you (potential fraud &mdash; report immediately)</li>
+      <li>Payment made by a minor without parental authorisation</li>
+    </ul>
+    <p>To request a refund, email <a href="mailto:support@vibecam.app" style="color:var(--accent);">support@vibecam.app</a> with your <strong>Razorpay Payment ID</strong> (format: <code>pay_XXXXXXXXXX</code>) within <strong>7 days</strong> of the transaction. Approved refunds are processed back to the original payment method within <strong>5&ndash;7 business days</strong>, subject to your bank&rsquo;s processing time.</p>
+    <h3>No recurring mandates without consent</h3>
+    <p>VibeCam does not set up auto-debit mandates, SI (standing instructions), or recurring charges on your payment instrument without your explicit, separate, prior consent at the time of payment. All current &ldquo;Support Me&rdquo; payments are one-time transactions.</p>
+    <h3>Chargebacks</h3>
+    <p>If you initiate a chargeback for a legitimate payment, we reserve the right to suspend your VibeCam account pending resolution of the chargeback dispute. Fraudulent chargeback requests will be contested with Razorpay and your bank.</p>
+    <h3>Razorpay&rsquo;s terms</h3>
+    <p>By making a payment, you also agree to <a href="https://razorpay.com/terms/" target="_blank" rel="noopener" style="color:var(--accent);">Razorpay&rsquo;s Terms of Service</a> and <a href="https://razorpay.com/privacy/" target="_blank" rel="noopener" style="color:var(--accent);">Privacy Policy</a>.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="t10">
+    <div class="section-number">10</div>
+    <h2>Consumer Protection Rights (India)</h2>
+    <p>If you are a consumer as defined under the <strong>Consumer Protection Act, 2019</strong>, nothing in these Terms limits or excludes any rights you have under that Act or any other applicable Indian consumer protection legislation. In particular:</p>
+    <ul>
+      <li>You have the right to be protected against unfair trade practices and misleading advertisements.</li>
+      <li>You have the right to seek redressal through the Consumer Disputes Redressal Commission if you have a grievance arising from a deficiency in service.</li>
+      <li>You may also file a complaint with the National Consumer Helpline (NCH) at <strong>1800-11-4000</strong> or via <a href="https://consumerhelpline.gov.in" target="_blank" rel="noopener" style="color:var(--accent);">consumerhelpline.gov.in</a>.</li>
+    </ul>
+    <p>Our internal grievance redressal mechanism (Section&nbsp;18) is designed to resolve disputes quickly and fairly before you need to escalate to external bodies.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="t11">
+    <div class="section-number">11</div>
+    <h2>Intellectual Property</h2>
+    <h3>VibeCam&rsquo;s IP</h3>
+    <p>The VibeCam name, logo, interface design, source code, Remotion compositions, and all other elements of the Service (excluding user-uploaded content) are owned by or licenced to VibeCam and protected under Indian and international copyright, trademark, and intellectual property laws. You may not reproduce, distribute, modify, or create derivative works from any part of the Service without our express written permission.</p>
+    <h3>Feedback</h3>
+    <p>If you submit ideas, suggestions, or feedback about the Service (&ldquo;Feedback&rdquo;), you grant us a perpetual, irrevocable, royalty-free licence to use that Feedback for any purpose, including improving the Service, without any obligation to compensate or credit you.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="section" id="t12">
+    <div class="section-number">12</div>
+    <h2>Disclaimer of Warranties</h2>
+    <div class="callout warn">
+      <div class="callout-label">No Warranty</div>
+      <p>The Service is provided &ldquo;AS IS&rdquo; and &ldquo;AS AVAILABLE&rdquo; without any warranty of any kind, express or implied, to the maximum extent permitted by applicable Indian law. We expressly disclaim all warranties including implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+    </div>
+    <p>We do not warrant that: (a) the Service will be uninterrupted, timely, secure, or error-free; (b) any recordings, editing projects, or render exports will be preserved without loss; (c) the Service will meet your specific requirements; or (d) the video editor or export functionality will be available at all times.</p>
+    <p>Screen recording relies on browser APIs and OS-level permissions. We do not warrant that recording, editing, or exporting will function correctly on all devices, browsers, or operating system versions. Nothing in this clause affects your statutory rights as a consumer under Indian law.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="section" id="t13">
+    <div class="section-number">13</div>
+    <h2>Limitation of Liability</h2>
+    <p>To the maximum extent permitted by applicable Indian law, VibeCam and its operators, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to: loss of recordings, loss of editing projects, loss of render exports, loss of data, loss of profits or revenue, or business interruption, arising from your use of or inability to use the Service, even if we have been advised of the possibility of such damages.</p>
+    <p>Our total aggregate liability to you for all claims arising from these Terms or the Service shall not exceed the greater of: (a) the total amount paid by you to VibeCam in the 12 months preceding the claim; or (b) <strong>&#8377; 500 (five hundred Indian Rupees)</strong>.</p>
+    <p>Nothing in this clause limits or excludes liability for: (i) death or personal injury caused by our negligence; (ii) fraud or fraudulent misrepresentation; or (iii) any liability that cannot be excluded under applicable Indian law including the Consumer Protection Act, 2019.</p>
+  </div>
+
+  <!-- 14 -->
+  <div class="section" id="t14">
+    <div class="section-number">14</div>
+    <h2>Indemnification</h2>
+    <p>You agree to defend, indemnify, and hold harmless VibeCam and its operators, officers, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or relating to:</p>
+    <ul>
+      <li>Your use of the Service in violation of these Terms or applicable Indian law</li>
+      <li>Your recordings and editing projects, including claims that they infringe third-party rights, violate privacy, or violate recording consent laws</li>
+      <li>Any content you create, edit, export, or share via the Service</li>
+      <li>Any background music or audio you upload without necessary rights</li>
+      <li>Any payment dispute initiated by you that is found to be fraudulent</li>
+    </ul>
+  </div>
+
+  <!-- 15 -->
+  <div class="section" id="t15">
+    <div class="section-number">15</div>
+    <h2>Termination</h2>
+    <h3>By you</h3>
+    <p>You may stop using the Service at any time. If you have an account, you may delete it via <strong>Settings &rarr; Account &rarr; Delete Account</strong> or by contacting us. Deletion results in permanent removal of your recordings, editing projects, and render exports from our servers (subject to legal retention obligations, including the 8-year payment record requirement).</p>
+    <h3>By us</h3>
+    <p>We reserve the right to suspend or terminate your access to the Service at any time, with or without notice, if we believe you have violated these Terms, if your activity poses a risk to other users or the Service, or if required by law or a competent authority.</p>
+    <h3>Effect of termination</h3>
+    <p>Upon termination, your right to use the Service ceases immediately. Sections relating to your content licence, intellectual property, disclaimer of warranties, limitation of liability, indemnification, and governing law survive termination.</p>
+  </div>
+
+  <!-- 16 -->
+  <div class="section" id="t16">
+    <div class="section-number">16</div>
+    <h2>Governing Law &amp; Dispute Resolution</h2>
+    <h3>Governing law</h3>
+    <p>These Terms are governed by and construed in accordance with the laws of India, including but not limited to the Information Technology Act, 2000, the Consumer Protection Act, 2019, the Indian Contract Act, 1872, and the Digital Personal Data Protection Act, 2023, without regard to conflict of law principles.</p>
+    <h3>Informal resolution first</h3>
+    <p>Before initiating any formal proceedings, both parties agree to attempt to resolve any dispute in good faith by contacting our Grievance Officer (Section&nbsp;18) and allowing 30 days for resolution. Most issues can be resolved quickly through direct communication.</p>
+    <h3>Arbitration</h3>
+    <p>If a dispute cannot be resolved informally within 30 days, it shall be finally settled by binding arbitration under the <strong>Arbitration and Conciliation Act, 1996</strong> (as amended). The arbitration shall be conducted by a sole arbitrator mutually agreed upon by the parties, or if no agreement is reached within 15 days, appointed by the competent court. The seat and venue of arbitration shall be <strong>Kathmandu, Nepal</strong> (or the city where VibeCam is principally operated, as updated in Section&nbsp;18). The language of arbitration shall be English. The arbitrator&rsquo;s award shall be final and binding.</p>
+    <h3>Consumer disputes</h3>
+    <p>Nothing in this clause prevents you from exercising your rights as a consumer under the Consumer Protection Act, 2019, including approaching the appropriate Consumer Disputes Redressal Commission. Consumer disputes under &#8377;&nbsp;50 lakh may be filed with the District Commission.</p>
+    <h3>Injunctive relief</h3>
+    <p>Either party may seek emergency injunctive or interim relief from a court of competent jurisdiction in India to prevent irreparable harm pending arbitration.</p>
+  </div>
+
+  <!-- 17 -->
+  <div class="section" id="t17">
+    <div class="section-number">17</div>
+    <h2>Changes to These Terms</h2>
+    <p>We may update these Terms from time to time. When we make material changes, we will: (a) update the version number and date at the top of this page; (b) display an in-app notification banner; and (c) where appropriate, send an email notification. Material changes include changes to payment terms, dispute resolution mechanisms, or new restrictions on use.</p>
+    <p>If you disagree with updated Terms, stop using the Service and delete your account before the changes take effect. Your continued use after the effective date constitutes acceptance.</p>
+  </div>
+
+  <!-- 18 -->
+  <div class="section" id="t18">
+    <div class="section-number">18</div>
+    <h2>Contact &amp; Grievance Officer</h2>
+    <p>As required under Rule 3(11) of the IT (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, VibeCam designates a Grievance Officer to handle complaints under the IT Act, 2000 and these Terms:</p>
+    <div class="contact-card">
+      <p><strong style="color:var(--text);">Grievance Officer &mdash; VibeCam</strong></p>
+      <p>Email: <a href="mailto:grievance@vibecam.app">grievance@vibecam.app</a></p>
+      <p>Legal &amp; DMCA: <a href="mailto:legal@vibecam.app">legal@vibecam.app</a></p>
+      <p>Abuse reports: <a href="mailto:abuse@vibecam.app">abuse@vibecam.app</a></p>
+      <p>Payment / billing: <a href="mailto:support@vibecam.app">support@vibecam.app</a></p>
+      <p>General support: <a href="mailto:support@vibecam.app">support@vibecam.app</a></p>
+      <p>Acknowledgement: within <strong>24 hours</strong>. Resolution: within <strong>30 days</strong> of receipt.</p>
+    </div>
+    <p style="margin-top:20px;">Complaints relating to content that is manifestly illegal (CSAM, incitement to violence) will be actioned within <strong>24 hours</strong> of receipt, in line with IT Act intermediary obligations.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2025 VibeCam. All rights reserved. Governed by the laws of India.</p>
+    <div class="footer-links">
+      <a href="vibecam-privacy-policy.html">Privacy Policy</a>
+      <a href="vibecam-terms-and-conditions.html" class="active">Terms &amp; Conditions</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

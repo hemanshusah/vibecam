@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — VibeCam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0A0A0B; --surface:#111113; --border:#1E1E22; --border-light:#2A2A2F;
+    --text:#F0F0F2; --muted:#9B9BA5; --dim:#6B6B75;
+    --accent:#E8FF47; --accent-dim:rgba(232,255,71,.10); --accent-border:rgba(232,255,71,.25);
+    --radius:12px; --sans:'Syne',Arial,sans-serif; --mono:'Geist Mono','Courier New',monospace; --max:780px;
+  }
+  html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.022;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  header { position:sticky; top:0; z-index:100; border-bottom:1px solid var(--border); background:rgba(10,10,11,.93); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  .header-inner { max-width:var(--max); margin:0 auto; padding:18px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { display:flex; align-items:center; gap:9px; font-weight:700; font-size:16px; color:var(--text); text-decoration:none; letter-spacing:-0.02em; }
+  .logo-dot { width:8px; height:8px; background:var(--accent); border-radius:50%; animation:pulse 2.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .doc-badge { font-family:var(--mono); font-size:11px; color:var(--dim); border:1px solid var(--border-light); padding:4px 10px; border-radius:6px; letter-spacing:.04em; }
+
+  .hero { max-width:var(--max); margin:0 auto; padding:64px 24px 48px; border-bottom:1px solid var(--border); }
+  .hero-eyebrow { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:14px; }
+  .hero h1 { font-size:clamp(32px,6vw,52px); font-weight:700; letter-spacing:-.035em; line-height:1.06; margin-bottom:16px; }
+  .version-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .vbadge { font-family:var(--mono); font-size:11px; color:var(--dim); background:var(--surface); border:1px solid var(--border-light); padding:4px 10px; border-radius:6px; }
+  .vbadge.new { color:var(--accent); border-color:var(--accent-border); background:var(--accent-dim); }
+  .hero-meta { display:flex; flex-wrap:wrap; gap:16px; font-family:var(--mono); font-size:12px; color:var(--dim); }
+  .hero-meta span { display:flex; align-items:center; gap:6px; }
+  .hero-meta span::before { content:''; width:4px; height:4px; background:var(--dim); border-radius:50%; }
+
+  .page-wrap { max-width:var(--max); margin:0 auto; padding:0 24px 100px; }
+
+  .toc { margin:44px 0; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:var(--radius); padding:24px 28px; }
+  .toc-title { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:16px; }
+  .toc ol { list-style:none; counter-reset:toc; display:grid; grid-template-columns:1fr 1fr; gap:7px 28px; }
+  .toc li { counter-increment:toc; font-size:13px; color:var(--muted); }
+  .toc li::before { content:counter(toc,decimal-leading-zero) ".  "; font-family:var(--mono); font-size:11px; color:var(--dim); }
+  .toc li a { color:var(--muted); text-decoration:none; transition:color .15s; }
+  .toc li a:hover { color:var(--accent); }
+
+  .callout { border-radius:var(--radius); padding:20px 24px; margin:24px 0; }
+  .callout.accent { background:var(--accent-dim); border:1px solid var(--accent-border); }
+  .callout.warn   { background:rgba(255,69,69,.07); border:1px solid rgba(255,69,69,.22); }
+  .callout.info   { background:rgba(100,160,255,.07); border:1px solid rgba(100,160,255,.2); }
+  .callout.neutral { background:var(--surface); border:1px solid var(--border-light); }
+  .callout-label { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .callout.warn .callout-label { color:#FF4545; }
+  .callout.info .callout-label { color:#6AB4FF; }
+  .callout p { font-size:14px; color:var(--muted); line-height:1.72; margin:0; }
+
+  .section { margin-top:60px; padding-top:8px; }
+  .section-number { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:.08em; margin-bottom:10px; }
+  .section h2 { font-size:22px; font-weight:700; letter-spacing:-.025em; line-height:1.2; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+  .section h3 { font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--text); margin:30px 0 10px; }
+  .section p { font-size:15px; color:var(--muted); line-height:1.78; margin-bottom:14px; }
+  .section p:last-child { margin-bottom:0; }
+  .section ul,.section ol { margin:12px 0 16px; padding-left:0; list-style:none; }
+  .section ul li,.section ol li { font-size:15px; color:var(--muted); line-height:1.72; padding:5px 0 5px 24px; position:relative; }
+  .section ul li::before { content:''; position:absolute; left:5px; top:14px; width:5px; height:5px; background:var(--accent); border-radius:50%; }
+
+  .data-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:13px; }
+  .data-table th { background:var(--surface); color:var(--text); font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; padding:10px 14px; text-align:left; border:1px solid var(--border); }
+  .data-table td { padding:10px 14px; border:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.6; }
+  .data-table tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+
+  .contact-card { background:var(--surface); border:1px solid var(--border-light); border-radius:var(--radius); padding:24px 28px; margin-top:24px; }
+  .contact-card p { font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .contact-card p:last-child { margin-bottom:0; }
+  .contact-card a { color:var(--accent); text-decoration:none; }
+
+  footer { border-top:1px solid var(--border); margin-top:80px; }
+  .footer-inner { max-width:var(--max); margin:0 auto; padding:28px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+  .footer-inner p { font-family:var(--mono); font-size:11px; color:var(--dim); }
+  .footer-links { display:flex; gap:20px; }
+  .footer-links a { font-family:var(--mono); font-size:11px; color:var(--dim); text-decoration:none; transition:color .15s; }
+  .footer-links a:hover,.footer-links a.active { color:var(--accent); }
+
+  @media (max-width:600px) { .toc ol{grid-template-columns:1fr} .hero{padding:40px 16px 32px} .page-wrap{padding:0 16px 60px} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo"><div class="logo-dot"></div>VibeCam</a>
+    <div class="doc-badge">Privacy Policy</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Legal &middot; Privacy</div>
+  <h1>Privacy Policy</h1>
+  <div class="version-row">
+    <span class="vbadge new">v2.0 &mdash; Updated 26 April 2025</span>
+    <span class="vbadge">Supersedes v1.0 (1 April 2025)</span>
+  </div>
+  <div class="hero-meta">
+    <span>Governing law: India</span>
+    <span>Payments: Razorpay &middot; &#8377; INR</span>
+    <span>Jurisdiction: India</span>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#s1">Who we are</a></li>
+      <li><a href="#s2">What data we collect</a></li>
+      <li><a href="#s3">Screen, audio &amp; editing data</a></li>
+      <li><a href="#s4">How we use your data</a></li>
+      <li><a href="#s5">Payments via Razorpay</a></li>
+      <li><a href="#s6">Data storage &amp; retention</a></li>
+      <li><a href="#s7">Third-party sub-processors</a></li>
+      <li><a href="#s8">Cookies &amp; tracking</a></li>
+      <li><a href="#s9">Your rights</a></li>
+      <li><a href="#s10">Children&rsquo;s privacy</a></li>
+      <li><a href="#s11">Data security</a></li>
+      <li><a href="#s12">Changes to this policy</a></li>
+      <li><a href="#s13">Grievance officer &amp; contact</a></li>
+    </ol>
+  </div>
+
+  <div class="callout accent">
+    <div class="callout-label">Plain-English Summary</div>
+    <p>Your recordings and editing projects belong to you. We do not watch, sell, or train AI on your content. Payments are processed by Razorpay in Indian Rupees (&#8377;) &mdash; your card details never touch our servers. You can delete your data at any time.</p>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">What&rsquo;s New in v2.0</div>
+    <p>Payment processor updated from Stripe to <strong>Razorpay</strong>; billing currency is now <strong>Indian Rupees (INR)</strong>. Section&nbsp;3 now covers Remotion-based video editing data (timelines, overlays, exports). Section&nbsp;9 reflects rights under India&rsquo;s <strong>Digital Personal Data Protection Act 2023</strong>. Governing law updated to <strong>India</strong>. Grievance Officer details added as required by Indian law.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="s1">
+    <div class="section-number">01</div>
+    <h2>Who We Are</h2>
+    <p>VibeCam (&ldquo;VibeCam&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;) is a browser-based screen recording, video editing, and sharing platform operated in India. Contact and Grievance Officer details are in Section&nbsp;13.</p>
+    <p>This Privacy Policy explains how we collect, use, store, share, and protect personal data when you use VibeCam at <strong>vibecam.app</strong> and related subdomains (collectively, the &ldquo;Service&rdquo;).</p>
+    <p>By using the Service you agree to the practices described here. If you do not agree, please stop using the Service.</p>
+    <h3>Applicable law</h3>
+    <p>This policy is governed by the laws of India, including the <strong>Information Technology Act, 2000</strong>, the IT (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011 (&ldquo;SPDI Rules&rdquo;), and the <strong>Digital Personal Data Protection Act, 2023</strong> (&ldquo;DPDP Act&rdquo;) to the extent its provisions are notified. Where you access the Service from outside India, local privacy laws may additionally apply.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="s2">
+    <div class="section-number">02</div>
+    <h2>What Data We Collect</h2>
+    <p>We collect only what is necessary to operate and improve the Service.</p>
+    <table class="data-table">
+      <thead><tr><th>Category</th><th>Examples</th><th>Why we collect it</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Account data</strong></td><td>Email address</td><td>Authentication, billing, transactional emails</td></tr>
+        <tr><td><strong>Recording metadata</strong></td><td>Duration, trim points, cut list, creation date, file size</td><td>Deliver sharing and editing features; storage management</td></tr>
+        <tr><td><strong>Recording content</strong></td><td>Video/audio of your screen, microphone (if enabled), camera (if enabled)</td><td>Store and deliver your recordings</td></tr>
+        <tr><td><strong>Editing project data</strong></td><td>Timeline state, overlay configs, text content, zoom regions, intro/outro settings, audio envelopes (Remotion CompositionProps JSON)</td><td>Save/restore editing sessions; render final video</td></tr>
+        <tr><td><strong>Rendered export data</strong></td><td>Final MP4 file, render job status, resolution, format, duration</td><td>Deliver your exported video</td></tr>
+        <tr><td><strong>Usage data</strong></td><td>Pages visited, feature interactions, browser type, OS, error logs</td><td>Improve the product; debug errors</td></tr>
+        <tr><td><strong>Payment data</strong></td><td>Razorpay Order ID, Payment ID, amount (&#8377; INR), status, billing email</td><td>Process contributions; financial/tax records</td></tr>
+        <tr><td><strong>Support data</strong></td><td>Messages and attachments you send us</td><td>Respond to your enquiries</td></tr>
+      </tbody>
+    </table>
+    <h3>Data we do NOT collect</h3>
+    <ul>
+      <li>We never capture your screen without you explicitly starting a recording.</li>
+      <li>We never access your microphone unless you enable &ldquo;Mic audio&rdquo;.</li>
+      <li>We never access your camera unless you enable &ldquo;Camera bubble&rdquo;.</li>
+      <li>We never use your recordings or editing data to train AI or machine learning models.</li>
+      <li>We never sell personal data to advertisers, data brokers, or any third party.</li>
+      <li>We never build advertising profiles based on your usage.</li>
+    </ul>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="s3">
+    <div class="section-number">03</div>
+    <h2>Screen Recording, Audio Capture &amp; Video Editing Data</h2>
+    <div class="callout warn">
+      <div class="callout-label">Your Responsibility</div>
+      <p>Content captured during a recording may include personal data of third parties visible on your screen, in audio, or on camera. You are solely responsible for ensuring you have the legal right to capture and share that content and that you comply with all applicable recording consent laws.</p>
+    </div>
+    <h3>How recording works technically</h3>
+    <p>VibeCam uses the browser&rsquo;s native <code>getDisplayMedia()</code> and <code>getUserMedia()</code> APIs, which are permission-gated. Your browser always prompts for explicit permission before any capture begins. We cannot capture your screen silently or without your active consent.</p>
+    <h3>What we capture (only with your permission)</h3>
+    <ul>
+      <li><strong>Screen content:</strong> Exactly what you choose to share in the browser permission dialog.</li>
+      <li><strong>System audio:</strong> Chrome/Edge only, and only if you tick &ldquo;Share system audio&rdquo; in the browser&rsquo;s own prompt.</li>
+      <li><strong>Microphone audio:</strong> Only if you toggle &ldquo;Mic audio&rdquo; on before recording.</li>
+      <li><strong>Camera:</strong> Only if you toggle &ldquo;Camera bubble&rdquo; on.</li>
+    </ul>
+    <h3>Video editing data (Remotion Editor)</h3>
+    <p>When you use VibeCam&rsquo;s Remotion-powered editor, your editing project is stored as a structured JSON (CompositionProps). This includes timeline clip positions and trim points, text overlay content and styling, zoom/blur/cursor-highlight effect configurations, speed ramp settings, intro and outro sequence configurations (including any title text you enter), and audio track settings and volume envelopes. This data is stored alongside your recording and used solely to operate your editing session and render exports.</p>
+    <h3>Rendered exports</h3>
+    <p>When you export a final MP4, the render job is processed via Remotion Lambda (AWS). The rendered file is stored in Cloudflare R2 and delivered via CDN. Render job logs (status, frame count, file size) are retained for 90 days.</p>
+    <h3>Storage location</h3>
+    <p><strong>Local mode (no account):</strong> Recordings and editing state are stored in your browser&rsquo;s IndexedDB. Nothing leaves your device unless you trigger a cloud save or Share.</p>
+    <p><strong>Cloud mode:</strong> When you click Share or save a project, data is uploaded to Cloudflare R2 and your project metadata to Supabase.</p>
+    <h3>Staff access to your content</h3>
+    <p>Staff do not routinely access the content of your recordings or editing projects. Access may occur only if required by a valid legal order under Indian law, you report content for abuse review, or it is necessary to investigate a Terms of Service breach with your explicit consent.</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="s4">
+    <div class="section-number">04</div>
+    <h2>How We Use Your Data</h2>
+    <ul>
+      <li><strong>To operate the Service</strong> &mdash; storing, editing, rendering, and sharing your recordings.</li>
+      <li><strong>To authenticate you</strong> &mdash; managing your account and session via Supabase Auth.</li>
+      <li><strong>To process payments</strong> &mdash; handling &ldquo;Support Me&rdquo; contributions via Razorpay in &#8377; INR.</li>
+      <li><strong>To communicate with you</strong> &mdash; sending transactional emails (confirmation, password reset, payment receipts). No marketing emails without explicit opt-in.</li>
+      <li><strong>To render your exports</strong> &mdash; passing CompositionProps to Remotion Lambda for video rendering.</li>
+      <li><strong>To improve the product</strong> &mdash; analysing aggregated, anonymised usage data.</li>
+      <li><strong>To ensure security</strong> &mdash; detecting abuse, fraud, and Terms of Service violations.</li>
+      <li><strong>To comply with legal obligations</strong> &mdash; responding to lawful requests from Indian authorities and courts.</li>
+    </ul>
+    <h3>Legal basis for processing</h3>
+    <p>Under the DPDP Act 2023 (India), we process personal data on the basis of your <strong>consent</strong> (given when you create an account, enable mic/camera, or make a payment) and <strong>legitimate uses</strong> as defined under the Act (security, fraud prevention, legal compliance, service delivery). Under the IT (SPDI) Rules 2011, we treat recording content, camera data, and payment credentials as &ldquo;sensitive personal data&rdquo; subject to heightened protection.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="s5">
+    <div class="section-number">05</div>
+    <h2>Payments via Razorpay</h2>
+    <div class="callout accent">
+      <div class="callout-label">Payment Processor</div>
+      <p>All payments on VibeCam are processed by <strong>Razorpay Software Private Limited</strong>, a PCI-DSS compliant payment gateway regulated by the Reserve Bank of India (RBI). All transactions are in <strong>Indian Rupees (&#8377; INR)</strong>. VibeCam never sees, stores, or processes your card number, CVV, UPI PIN, net banking credentials, or wallet login.</p>
+    </div>
+    <h3>What VibeCam stores</h3>
+    <ul>
+      <li>Razorpay Order ID (e.g. <code>order_XXXXXXXXXX</code>)</li>
+      <li>Razorpay Payment ID (e.g. <code>pay_XXXXXXXXXX</code>)</li>
+      <li>Amount in INR (in paise) and currency code <code>INR</code></li>
+      <li>Payment status: <code>created</code>, <code>authorized</code>, <code>captured</code>, <code>failed</code>, or <code>refunded</code></li>
+      <li>Billing email address</li>
+      <li>Date and time of the transaction</li>
+    </ul>
+    <h3>What Razorpay stores independently</h3>
+    <p>Razorpay stores your payment credentials (card details, UPI ID, net banking session, wallet info) under their own privacy policy and RBI/PCI-DSS compliance obligations. We encourage you to review the <a href="https://razorpay.com/privacy/" target="_blank" rel="noopener" style="color:var(--accent);">Razorpay Privacy Policy</a> before making a payment.</p>
+    <h3>Supported payment methods (via Razorpay)</h3>
+    <ul>
+      <li>Credit &amp; debit cards (Visa, Mastercard, RuPay, American Express)</li>
+      <li>UPI (Google Pay, PhonePe, Paytm, BHIM UPI, and all UPI-enabled apps)</li>
+      <li>Net banking (all major Indian banks)</li>
+      <li>Wallets (Paytm, Mobikwik, Freecharge, and others supported by Razorpay)</li>
+      <li>EMI options (where available from your bank)</li>
+    </ul>
+    <h3>GST &amp; taxes</h3>
+    <p>Where applicable under the Goods and Services Tax Act, 2017, GST will be applied to the transaction and shown clearly at checkout before you confirm payment. A GST-compliant receipt will be sent to your billing email address.</p>
+    <h3>Refund policy</h3>
+    <p>&ldquo;Support Me&rdquo; contributions are voluntary donations to support VibeCam&rsquo;s development and are generally non-refundable. If you were charged in error or charged twice, contact <a href="mailto:support@vibecam.app" style="color:var(--accent);">support@vibecam.app</a> with your Razorpay Payment ID within <strong>7 days</strong> of the transaction. We will investigate and, if a refund is warranted, process it through Razorpay. Refunds typically take <strong>5&ndash;7 business days</strong> to reflect, depending on your bank or payment method.</p>
+    <h3>No recurring charges without consent</h3>
+    <p>VibeCam does not set up recurring mandates or standing instructions on your payment method without your explicit prior consent. All current &ldquo;Support Me&rdquo; payments are one-time transactions.</p>
+    <h3>Data localisation</h3>
+    <p>Razorpay, as an RBI-regulated entity, stores payment data in India in compliance with RBI data localisation requirements. The Order IDs and Payment IDs we store (non-sensitive references) are held in our Supabase database &mdash; see Section&nbsp;6 for storage location details.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="s6">
+    <div class="section-number">06</div>
+    <h2>Data Storage &amp; Retention</h2>
+    <h3>Infrastructure</h3>
+    <p>VibeCam uses <strong>Supabase</strong> (authentication, database, metadata), <strong>Cloudflare R2</strong> (video/audio file storage and CDN), and <strong>AWS Lambda via Remotion</strong> (video rendering). Payment credentials are stored solely by Razorpay in India.</p>
+    <div class="callout info">
+      <div class="callout-label">Note on data residency</div>
+      <p>Supabase and Cloudflare R2 may store data in data centres outside India (US/EU). By using the Service you consent to this cross-border transfer. We select providers with strong security certifications (SOC 2 Type II, ISO 27001) and data processing agreements. If India-only data residency is a strict requirement, contact us before using the Service.</p>
+    </div>
+    <h3>Retention periods</h3>
+    <table class="data-table">
+      <thead><tr><th>Data type</th><th>Retained for</th></tr></thead>
+      <tbody>
+        <tr><td>Cloud-shared recordings</td><td>Until you delete them, or 90 days after account closure</td></tr>
+        <tr><td>Local (browser-only) recordings</td><td>Until you clear your browser storage &mdash; we have no access</td></tr>
+        <tr><td>Editing project data (CompositionProps JSON)</td><td>Same duration as the associated recording</td></tr>
+        <tr><td>Rendered MP4 export files</td><td>90 days from render date, or until you delete them</td></tr>
+        <tr><td>Render job logs</td><td>90 days from render completion</td></tr>
+        <tr><td>Account data (email, password hash)</td><td>Until account deletion + 30-day grace period</td></tr>
+        <tr><td>Payment records (Order ID, Payment ID, amount, status)</td><td>8 years (Indian tax and accounting law)</td></tr>
+        <tr><td>Usage analytics (anonymised)</td><td>24 months rolling</td></tr>
+        <tr><td>Support communications</td><td>3 years after case closure</td></tr>
+      </tbody>
+    </table>
+    <h3>Deleting your data</h3>
+    <p>Delete individual recordings and editing projects from your dashboard at any time. To delete your entire account and all associated data, go to <strong>Settings &rarr; Account &rarr; Delete Account</strong> or contact our Grievance Officer (Section&nbsp;13). We action deletion requests within <strong>30 days</strong>, subject to legal retention obligations (e.g. payment records must be kept for 8 years).</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="s7">
+    <div class="section-number">07</div>
+    <h2>Third-Party Sub-Processors</h2>
+    <p>We do not sell your data. We share data with these sub-processors only to operate the Service:</p>
+    <table class="data-table">
+      <thead><tr><th>Provider</th><th>Purpose</th><th>Data shared</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Supabase</strong></td><td>Auth, database, project metadata</td><td>Email, hashed password, session tokens, recording metadata, editing project JSON, Razorpay reference IDs</td><td>US / EU (AWS-backed)</td></tr>
+        <tr><td><strong>Cloudflare R2</strong></td><td>Video/audio storage, CDN</td><td>Recording files, rendered MP4 exports</td><td>Global CDN (US primary)</td></tr>
+        <tr><td><strong>Razorpay</strong></td><td>Payment processing</td><td>Billing email, payment amount &amp; method (processed by Razorpay directly in India)</td><td>India (RBI-regulated)</td></tr>
+        <tr><td><strong>AWS Lambda (Remotion)</strong></td><td>Video rendering (export)</td><td>CompositionProps JSON, recording file CDN URLs as render inputs</td><td>US East (ap-south-1 optional)</td></tr>
+        <tr><td><strong>Error monitoring (e.g. Sentry)</strong></td><td>Bug reporting, diagnostics</td><td>Anonymised error stack traces, browser info &mdash; no recording content</td><td>US / EU</td></tr>
+      </tbody>
+    </table>
+    <h3>Legal disclosures</h3>
+    <p>We may disclose personal data if required by Indian law, a court order, or a directive from a competent government authority (including the Ministry of Electronics and Information Technology), or if necessary to protect the rights, property, or safety of VibeCam, our users, or the public.</p>
+    <h3>Business transfers</h3>
+    <p>If VibeCam is acquired, merged, or its assets transferred, your data may form part of that transaction. We will notify you at least 15 days in advance of any materially different privacy policy taking effect, giving you the option to delete your account first.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="s8">
+    <div class="section-number">08</div>
+    <h2>Cookies &amp; Tracking</h2>
+    <p>VibeCam uses a minimal and purposeful set of browser storage mechanisms:</p>
+    <ul>
+      <li><strong>Session cookie (Supabase Auth):</strong> Secure, HTTP-only cookie to maintain your logged-in session. Essential and cannot be disabled while using account features.</li>
+      <li><strong>Preference storage (localStorage):</strong> Saves editor preferences (mic toggle, camera toggle, timeline zoom) between sessions. No personal data.</li>
+      <li><strong>Recording storage (IndexedDB):</strong> Stores your local recordings and editing state in no-account mode. Never leaves your device unless you trigger a cloud save or Share.</li>
+      <li><strong>Razorpay SDK:</strong> The Razorpay checkout widget may set cookies for fraud detection and session continuity during the payment flow. These are governed by Razorpay&rsquo;s privacy policy.</li>
+    </ul>
+    <p>We do not use advertising cookies, cross-site tracking pixels, or third-party analytics that build advertising profiles. If we introduce analytics tools in the future, we will update this policy and seek consent where required by Indian law.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="s9">
+    <div class="section-number">09</div>
+    <h2>Your Rights</h2>
+    <h3>Rights under Indian law</h3>
+    <ul>
+      <li><strong>Right to access:</strong> Request a summary of the personal data we hold about you and how it is processed.</li>
+      <li><strong>Right to correction and erasure (DPDP Act 2023):</strong> Request correction of inaccurate data or erasure of data that is no longer necessary, subject to legal retention obligations.</li>
+      <li><strong>Right to grievance redressal:</strong> Lodge a complaint with our Grievance Officer (Section&nbsp;13). Acknowledged within 48 hours; resolved within 30 days.</li>
+      <li><strong>Right to withdraw consent:</strong> Withdraw consent for processing at any time. Withdrawal does not affect prior lawful processing.</li>
+      <li><strong>Right to nominate:</strong> Under the DPDP Act 2023, nominate another individual to exercise your rights in the event of death or incapacity.</li>
+    </ul>
+    <h3>Additional rights for users outside India</h3>
+    <p>If you access the Service from the European Economic Area (EEA) or UK, you additionally have rights under GDPR/UK GDPR including: data portability, restriction of processing, and the right to object to processing. You may also lodge a complaint with your local Data Protection Authority (e.g. the ICO in the UK).</p>
+    <h3>How to exercise your rights</h3>
+    <p>Contact our Grievance Officer at the address in Section&nbsp;13. We will respond within <strong>30 days</strong>. We may need to verify your identity before acting. There is no charge for exercising your rights.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="s10">
+    <div class="section-number">10</div>
+    <h2>Children&rsquo;s Privacy</h2>
+    <p>VibeCam is not directed at children under the age of <strong>18</strong> (consistent with Indian majority law under the Indian Majority Act, 1875). We do not knowingly collect personal data from minors. If you are a parent or guardian and believe your child has provided us with personal data, contact our Grievance Officer immediately &mdash; we will delete the data within 72 hours of verification.</p>
+    <p>Once the DPDP Act 2023&rsquo;s provisions on processing children&rsquo;s data are notified, we will implement verifiable parental consent mechanisms as required.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="s11">
+    <div class="section-number">11</div>
+    <h2>Data Security</h2>
+    <p>We implement reasonable security practices and procedures as required under Rule 8 of the IT (SPDI) Rules 2011, including:</p>
+    <ul>
+      <li>HTTPS (TLS 1.2+) for all data in transit</li>
+      <li>Bcrypt password hashing via Supabase Auth</li>
+      <li>Role-based access controls limiting staff access to production data</li>
+      <li>Cloudflare R2 server-side encryption (AES-256) for stored recordings</li>
+      <li>Razorpay PCI-DSS Level 1 compliance for all payment data</li>
+      <li>Signed, time-limited CDN URLs for accessing stored recordings</li>
+    </ul>
+    <p>No method of transmission or storage is 100% secure. In the event of a data breach likely to adversely affect your rights, we will notify you and relevant Indian authorities within the timeframes stipulated under applicable law.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="section" id="s12">
+    <div class="section-number">12</div>
+    <h2>Changes to This Policy</h2>
+    <p>When we make material changes to this policy, we will: (a) update the version number and effective date at the top of this page; (b) display an in-app notification banner; and (c) where appropriate, send an email notification to your registered address. Material changes include changes to our payment processor, new data categories, new sub-processors, or changes to retention periods.</p>
+    <p>Your continued use of the Service after the effective date constitutes acceptance of the revised policy.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="section" id="s13">
+    <div class="section-number">13</div>
+    <h2>Grievance Officer &amp; Contact</h2>
+    <p>As required under Rule 5(9) of the IT (SPDI) Rules 2011 and the DPDP Act 2023, VibeCam designates a Grievance Officer to address privacy complaints and data subject requests:</p>
+    <div class="contact-card">
+      <p><strong style="color:var(--text);">Grievance Officer &mdash; VibeCam</strong></p>
+      <p>Email: <a href="mailto:grievance@vibecam.app">grievance@vibecam.app</a></p>
+      <p>Privacy enquiries: <a href="mailto:privacy@vibecam.app">privacy@vibecam.app</a></p>
+      <p>Payment / billing support: <a href="mailto:support@vibecam.app">support@vibecam.app</a></p>
+      <p>Abuse reports: <a href="mailto:abuse@vibecam.app">abuse@vibecam.app</a></p>
+      <p>Response: Complaints acknowledged within <strong>48 hours</strong> and resolved within <strong>30 days</strong>.</p>
+    </div>
+    <p style="margin-top:20px;">If you are not satisfied with our resolution, you may escalate to the Data Protection Board of India once it is constituted and operational under the DPDP Act 2023.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <p>&copy; 2025 VibeCam. All rights reserved. Governed by the laws of India.</p>
+    <div class="footer-links">
+      <a href="vibecam-privacy-policy.html" class="active">Privacy Policy</a>
+      <a href="vibecam-terms-and-conditions.html">Terms &amp; Conditions</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
