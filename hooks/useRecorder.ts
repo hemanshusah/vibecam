@@ -78,20 +78,7 @@ export function useRecorder() {
       let camStream: MediaStream | null = null;
       let micStream: MediaStream | null = null;
 
-      if (mode === 'recording') {
-        displayStream = await navigator.mediaDevices.getDisplayMedia({
-          video: { frameRate: { ideal: 30 } },
-          audio: true,
-        });
-        globalDisplayStream = displayStream;
-
-        // Handle native "stop sharing"
-        displayStream.getVideoTracks()[0].addEventListener('ended', () => {
-          stopRecording();
-        });
-      }
-
-      // 2. Get Webcam
+      // 1. Get Webcam
       if (store.useCamera || mode === 'video') {
         try {
           camStream = await navigator.mediaDevices.getUserMedia({
@@ -105,12 +92,34 @@ export function useRecorder() {
         }
       }
 
-      // 3. Get Mic
+      // 2. Get Mic
       if (store.useMic) {
         try {
           micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         } catch (e) {
           console.warn('Mic permission denied or unavailable', e);
+        }
+      }
+
+      // 3. Get Screen
+      if (mode === 'recording') {
+        try {
+          displayStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { frameRate: { ideal: 30 } },
+            audio: true,
+          });
+          globalDisplayStream = displayStream;
+
+          // Handle native "stop sharing"
+          displayStream.getVideoTracks()[0].addEventListener('ended', () => {
+            stopRecording();
+          });
+        } catch (e) {
+          console.error('Screen sharing denied', e);
+          // If screen share denied, stop everything
+          if (camStream) camStream.getTracks().forEach(t => t.stop());
+          if (micStream) micStream.getTracks().forEach(t => t.stop());
+          return;
         }
       }
 

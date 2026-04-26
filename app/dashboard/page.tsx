@@ -114,16 +114,9 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [user, fetchRecordings, fetchRenders]);
 
-  const handleDeleteRender = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this export?')) return;
-    try {
-      const { error } = await supabase.from("renders").delete().eq("id", id);
-      if (!error) {
-        setRenders((prev) => prev.filter((r) => r.id !== id));
-      }
-    } catch (err) {
-      console.error("Failed to delete render:", err);
-    }
+  const handleDeleteRender = (id: string) => {
+    setVideoToDelete(id);
+    setConfirmDeleteOpen(true);
   };
 
   const handleCopyLink = (id: string, type: 'recording' | 'render') => {
@@ -147,9 +140,18 @@ export default function DashboardPage() {
     const id = videoToDelete;
     setConfirmDeleteOpen(false);
     try {
-      const { error } = await supabase.from("videos").delete().eq("id", id);
+      // Try deleting from renders first, then videos
+      const isRender = renders.some(r => r.id === id);
+      const table = isRender ? 'renders' : 'videos';
+      
+      const { error } = await supabase.from(table).delete().eq("id", id);
+      
       if (!error) {
-        setRecordings((prev) => prev.filter((r) => r.id !== id));
+        if (isRender) {
+          setRenders((prev) => prev.filter((r) => r.id !== id));
+        } else {
+          setRecordings((prev) => prev.filter((r) => r.id !== id));
+        }
       }
     } catch (err) {
       console.error("Failed to delete:", err);
