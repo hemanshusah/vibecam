@@ -6,7 +6,6 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Watermark } from '@/components/Watermark';
-import { Watermark } from '@/components/Watermark';
 
 export const dynamic = 'force-dynamic';
 
