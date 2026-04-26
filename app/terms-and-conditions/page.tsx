@@ -52,6 +52,10 @@ export default function TermsAndConditions() {
               { id: 't10', text: 'Disclaimer of warranties' },
               { id: 't11', text: 'Limitation of liability' },
               { id: 't12', text: 'Indemnification' },
+              { id: 't13', text: 'Termination' },
+              { id: 't14', text: 'Governing law' },
+              { id: 't15', text: 'Changes to terms' },
+              { id: 't16', text: 'Contact' },
             ].map((item, i) => (
               <li key={item.id} className="font-mono text-xs text-muted flex items-start gap-3 group">
                 <span className="text-dim">{(i + 1).toString().padStart(2, '0')}.</span>
@@ -77,12 +81,8 @@ export default function TermsAndConditions() {
             <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">01</div>
             <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Agreement to Terms</h2>
             <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
-              <p>
-                These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of VibeCam (&quot;VibeCam&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;), including our website, web application, and any related services.
-              </p>
-              <p>
-                By accessing or using the Service — including by recording, sharing, or watching a VibeCam recording — you agree to be bound by these Terms and our <Link href="/privacy-policy" className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-all">Privacy Policy</Link>. If you do not agree, do not use the Service.
-              </p>
+              <p>These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of VibeCam (&quot;VibeCam&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;), including our website, web application, and any related services.</p>
+              <p>By accessing or using the Service you agree to be bound by these Terms and our <Link href="/privacy-policy" className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-all">Privacy Policy</Link>.</p>
             </div>
           </section>
 
@@ -90,20 +90,16 @@ export default function TermsAndConditions() {
             <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">02</div>
             <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">The Service</h2>
             <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
-              <p>VibeCam provides a browser-based screen recording tool that allows users to:</p>
-              <ul className="space-y-2 list-none p-0">
-                {[
-                  'Capture their screen, browser tab, or application window using native browser APIs',
-                  'Optionally capture microphone audio and/or camera video',
-                  'Trim the beginning and end of recordings',
-                  'Generate shareable links to their recordings',
-                  'Make optional voluntary "Support Me" contributions to the developer',
-                ].map((item, i) => (
-                  <li key={i} className="relative pl-6 before:content-[''] before:absolute before:left-1 before:top-2 before:w-1.5 before:h-1.5 before:bg-accent before:rounded-full">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p>VibeCam provides a browser-based screen recording tool that allows users to capture screens, microphone audio, and camera video; trim recordings; and generate shareable links.</p>
+              <p>The Service is provided &quot;as is&quot; and may be updated or modified at any time.</p>
+            </div>
+          </section>
+
+          <section id="t3" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">03</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Eligibility & Accounts</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You must be at least 13 years old (or 16 in the EEA) to use VibeCam. You are responsible for maintaining the confidentiality of your account credentials.</p>
             </div>
           </section>
 
@@ -112,23 +108,107 @@ export default function TermsAndConditions() {
             <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Screen Recording Rules</h2>
             <div className="bg-red-dim border border-red/20 rounded-xl p-8 mb-8">
               <h3 className="font-mono text-[10px] text-red uppercase tracking-widest mb-3">Critical — Your Legal Responsibility</h3>
-              <p className="text-muted leading-relaxed text-sm">
-                Recording other people&apos;s screens, video calls, or private communications without their knowledge or consent may be illegal in your jurisdiction. You are solely responsible for ensuring your recordings comply with applicable law. VibeCam is a tool — legal responsibility for how you use it rests entirely with you.
-              </p>
+              <p className="text-muted leading-relaxed text-sm">Recording people without their consent may be illegal. You are solely responsible for ensuring your recordings comply with applicable law.</p>
             </div>
-            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed text-sm">
-              <p>You must not use VibeCam to record any person without their knowledge and consent where required by law, private communications, phone calls, or video meetings, content that you do not have the right to capture (e.g. DRM-protected media), personal data of others without a lawful basis, or confidential business information.</p>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You must not record people without knowledge and consent, private communications, or content you do not have rights to (e.g. DRM-protected media).</p>
             </div>
           </section>
 
-          {/* Additional Sections (Omitted for brevity in extraction, but I will include all in the actual file) */}
+          <section id="t5" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">05</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Acceptable Use Policy</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You agree not to use the Service for illegal activities, copyright infringement, harassment, or to spread malware. Technical restrictions include no reverse engineering, scraping, or interfering with security features.</p>
+            </div>
+          </section>
+
+          <section id="t6" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">06</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Your Content & Licence</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You own your recordings. By using the Share feature, you grant us a limited licence solely to store and deliver your recording to your intended recipients.</p>
+            </div>
+          </section>
+
+          <section id="t7" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">07</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Sharing & Links</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You are responsible for who you share links with. We do not guarantee permanent availability of shared links. Report abusive content to <a href="mailto:connect@dazuservices.com" className="text-accent underline underline-offset-4 tracking-wider">connect@dazuservices.com</a>.</p>
+            </div>
+          </section>
+
+          <section id="t8" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">08</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">&quot;Support Me&quot; Payments</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>Contributions are voluntary donations to support development. They are generally non-refundable. Payments are handled by Stripe, and we do not store your card details.</p>
+            </div>
+          </section>
+
+          <section id="t9" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">09</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Intellectual Property</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>The VibeCam name, logo, and interface are protected ownership elements. You grant us a licence to use any feedback you provide for further development without obligation.</p>
+            </div>
+          </section>
+
+          <section id="t10" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">10</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Disclaimer of Warranties</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>The Service is provided &quot;AS IS&quot; without warranties of any kind. We do not warrant that the Service will be error-free or that recordings will never be lost.</p>
+            </div>
+          </section>
+
+          <section id="t11" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">11</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Limitation of Liability</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>Our total aggregate liability is limited to the amount you paid us in the last 12 months or £50, whichever is greater.</p>
+            </div>
+          </section>
+
           <section id="t12" className="scroll-mt-32">
             <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">12</div>
             <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Indemnification</h2>
             <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
-              <p>
-                You agree to defend, indemnify, and hold harmless VibeCam and its operators, officers, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or relating to your use of the Service in violation of these Terms, your recordings, your violation of any applicable law, or any content you share via the Service.
-              </p>
+              <p>You agree to indemnify VibeCam against any claims arising from your use of the Service, your recordings, or your violation of these Terms.</p>
+            </div>
+          </section>
+
+          <section id="t13" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">13</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Termination</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>You may stop using the Service anytime. We reserve the right to suspend or terminate access if you violate these Terms.</p>
+            </div>
+          </section>
+
+          <section id="t14" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">14</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Governing Law</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>These Terms are governed by the laws of England and Wales. Informal resolution is encouraged before formal legal proceedings.</p>
+            </div>
+          </section>
+
+          <section id="t15" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">15</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Changes to Terms</h2>
+            <div className="prose prose-invert max-w-none text-muted space-y-4 text-sm leading-relaxed">
+              <p>We update these Terms periodically. Continued use after changes take effect constitutes acceptance of the revised Terms.</p>
+            </div>
+          </section>
+
+          <section id="t16" className="scroll-mt-32">
+            <div className="font-mono text-[10px] text-accent uppercase tracking-widest mb-3">16</div>
+            <h2 className="font-syne font-bold text-2xl text-text border-b border-border pb-4 mb-8">Contact</h2>
+            <div className="bg-surface border border-border-light rounded-xl p-8">
+              <p className="font-syne font-bold text-text mb-2">VibeCam — Legal & Support</p>
+              <p className="text-sm text-muted mb-4">Email: <a href="mailto:connect@dazuservices.com" className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-all">connect@dazuservices.com</a></p>
             </div>
           </section>
         </div>

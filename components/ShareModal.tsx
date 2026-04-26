@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useAppStore } from '@/store/useAppStore';
-import { Copy, Check, X } from 'lucide-react';
+import { Copy, Check, X, Scissors } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export function ShareModal() {
   const { shareUrl, setShareModalOpen, setStatus } = useAppStore();
@@ -15,12 +16,12 @@ export function ShareModal() {
       await navigator.clipboard.writeText(fullUrl);
       setCopied(true);
       
-      // Auto-redirect to dashboard after successful copy
+      // Auto-redirect to editor after successful copy
       setTimeout(() => {
         setCopied(false);
         setShareModalOpen(false);
         setStatus('idle');
-        router.push('/dashboard');
+        router.push(`/edit/${shareUrl}`);
       }, 1000);
     } catch (err) {
       console.error('Failed to copy text: ', err);
@@ -46,7 +47,7 @@ export function ShareModal() {
           Cloud upload complete. Anyone with this link can view your recording.
         </p>
 
-        <div className="flex items-center gap-2 p-1.5 bg-black border border-border rounded-lg">
+        <div className="flex items-center gap-2 p-1.5 bg-black border border-border rounded-lg mb-4">
           <input 
             type="text" 
             readOnly 
@@ -64,6 +65,14 @@ export function ShareModal() {
             {copied ? 'Copied' : 'Copy'}
           </button>
         </div>
+
+        <Link 
+          href={`/edit/${shareUrl}`}
+          className="flex items-center justify-center gap-2 w-full py-3 bg-accent/10 border border-accent/20 text-accent hover:bg-accent hover:text-surface font-syne font-bold text-sm rounded-xl transition-all shadow-sm"
+          onClick={() => setShareModalOpen(false)}
+        >
+          <Scissors size={16} /> Edit with Timeline
+        </Link>
       </div>
     </div>
   );

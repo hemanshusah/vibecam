@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { Heart, Mail } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
   const { setSupportModalOpen } = useAppStore();
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/edit')) return null;
 
   return (
     <footer className="w-full border-t border-border bg-bg/80 backdrop-blur-sm mt-auto">

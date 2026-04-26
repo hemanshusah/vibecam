@@ -11,10 +11,11 @@ type AppStore = {
   // Active recording
   recordedBlob: Blob | null;
   recordedUrl: string | null;
+  recordedMode: 'recording' | 'video';
   recSeconds: number;
   isPaused: boolean;
   
-  setRecordedData: (blob: Blob | null, url: string | null) => void;
+  setRecordedData: (blob: Blob | null, url: string | null, mode?: 'recording' | 'video') => void;
   setRecSeconds: (sec: number) => void;
   setIsPaused: (val: boolean) => void;
 
@@ -51,10 +52,12 @@ export const useAppStore = create<AppStore>((set) => ({
 
   recordedBlob: null,
   recordedUrl: null,
+  recordedMode: 'recording' as 'recording' | 'video',
   recSeconds: 0,
   isPaused: false,
   
-  setRecordedData: (recordedBlob, recordedUrl) => set({ recordedBlob, recordedUrl }),
+  setRecordedData: (recordedBlob, recordedUrl, recordedMode = 'recording') => 
+    set({ recordedBlob, recordedUrl, recordedMode }),
   setRecSeconds: (recSeconds) => set({ recSeconds }),
   setIsPaused: (isPaused) => set({ isPaused }),
 
