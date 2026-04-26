@@ -61,9 +61,10 @@ export default function WatchExportPage() {
 
   const composition = render.composition;
   const fps = ((composition as Record<string, unknown>)?.fps as number) || 30;
-  const durationInFrames = getTotalDurationFrames((composition as Record<string, unknown>)?.clips as { startFrame: number; durationInFrames: number }[] || []) + 
-                           ((composition as Record<string, unknown>)?.intro as { durationFrames: number })?.durationFrames || 0 + 
-                           ((composition as Record<string, unknown>)?.outro as { durationFrames: number })?.durationFrames || 0;
+  const durationInFrames = 
+    getTotalDurationFrames((composition as Record<string, unknown>)?.clips as { startFrame: number; durationInFrames: number }[] || []) + 
+    (((composition as Record<string, unknown>)?.intro as { durationFrames: number })?.durationFrames || 0) + 
+    (((composition as Record<string, unknown>)?.outro as { durationFrames: number })?.durationFrames || 0);
 
   if (render.status !== 'done') {
     return (

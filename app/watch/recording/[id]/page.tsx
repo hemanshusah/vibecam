@@ -63,6 +63,16 @@ export default function WatchRecordingPage() {
 
   const isOwner = user && user.id === recording.user_id;
 
+  const toggleFullscreen = () => {
+    const container = document.getElementById('player-container');
+    if (!container) return;
+    if (!document.fullscreenElement) {
+      container.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 animate-fade-in text-text">
       <div className="max-w-4xl w-full space-y-8">
@@ -80,12 +90,16 @@ export default function WatchRecordingPage() {
         </div>
 
         {/* Video Player */}
-        <div className="relative aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10">
+        <div 
+          id="player-container"
+          className="relative aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10 group"
+        >
            <video 
              src={recording.video_url} 
              controls 
              className="w-full h-full object-contain" 
              autoPlay
+             onDoubleClick={toggleFullscreen}
            />
            <Watermark />
         </div>

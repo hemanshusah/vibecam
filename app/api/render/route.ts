@@ -8,7 +8,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { composition, resolution, format, quality, title, user_id } = body;
+    const { composition, resolution, format, quality, title, user_id, recording_id } = body;
 
     if (!composition || !composition.clips || composition.clips.length === 0) {
       return NextResponse.json(
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const { error: dbError } = await supabaseAdmin.from('renders').insert({
       id: renderId,
       user_id: user_id, // Restore user_id for RLS compliance
-      recording_id: composition.clips[0]?.src || 'unknown',
+      recording_id: recording_id, // Now correctly uses the DB ID passed from UI
       status: 'queued',
       progress: 0,
       resolution,

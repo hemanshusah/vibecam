@@ -47,6 +47,8 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
     setProgress(0);
     setError(null);
 
+    const recordingId = useEditorStore.getState().recordingId;
+
     try {
       // Get current user for RLS
       const { data: { user } } = await supabase.auth.getUser();
@@ -62,6 +64,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
           quality,
           title: recordingTitle,
           user_id: user?.id,
+          recording_id: recordingId,
         }),
       });
 

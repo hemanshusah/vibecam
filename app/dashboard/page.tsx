@@ -165,7 +165,7 @@ export default function DashboardPage() {
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = blobUrl;
-      a.download = `${title.replace(/\s+/g, "-").toLowerCase()}.webm`;
+      a.download = `${title.replace(/\s+/g, "-").toLowerCase()}.mp4`; // Changed to .mp4
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
