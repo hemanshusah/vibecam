@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Download, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Player } from '@remotion/player';
 import { VibeCamComposition } from '@/remotion/VibeCamComposition';
@@ -10,7 +10,6 @@ import { getTotalDurationFrames } from '@/lib/remotion-utils';
 import { useParams } from 'next/navigation';
 import { CompositionProps } from '@/lib/remotion-types';
 import { Watermark } from '@/components/Watermark';
-import { useAuth } from '@/context/AuthProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +28,6 @@ export default function WatchExportPage() {
   const params = useParams();
   const id = params?.id as string;
   
-  const { user } = useAuth();
   const [render, setRender] = useState<RenderRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -84,25 +82,25 @@ export default function WatchExportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-bg flex flex-col items-center justify-center p-6 animate-fade-in">
-      <div className="max-w-4xl w-full space-y-8">
+    <div className="min-h-screen bg-bg flex flex-col items-center p-6 animate-fade-in text-text overflow-x-hidden">
+      <div className="max-w-4xl w-full flex flex-col items-center">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-             <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-surface font-syne font-bold text-xs shadow-lg shadow-accent/20 transition-transform group-hover:scale-110">V</div>
-             <span className="font-syne font-bold text-lg tracking-tight">VibeCam</span>
-          </Link>
-          
-          <Link 
-            href={user ? "/dashboard" : "/auth/signup"} 
-            className="px-4 py-2 bg-surface border border-border hover:border-accent hover:text-accent rounded-xl font-syne font-bold text-xs transition-all flex items-center gap-2"
-          >
-            {user ? "Dashboard" : "Join VibeCam"} <ArrowLeft size={14} className="rotate-180" />
-          </Link>
+        <div className="w-full flex items-center justify-between mb-12">
+           <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-surface font-syne font-bold text-xs shadow-lg shadow-accent/20 transition-transform group-hover:scale-110">V</div>
+              <span className="font-syne font-bold text-lg tracking-tight">VibeCam</span>
+           </Link>
+           
+           <Link 
+             href="/auth/signup" 
+             className="px-6 py-2 bg-surface/50 border border-border hover:border-accent hover:text-accent rounded-xl font-syne font-bold text-xs transition-all flex items-center gap-2"
+           >
+             Join VibeCam <ArrowLeft size={14} className="rotate-180" />
+           </Link>
         </div>
 
-        {/* Video Player */}
-        <div className="relative aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10">
+        {/* Video Player Section */}
+        <div className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] border border-white/5 ring-1 ring-white/10 mb-10">
           <Player
             component={VibeCamComposition}
             inputProps={composition as unknown as CompositionProps}
@@ -116,48 +114,31 @@ export default function WatchExportPage() {
           <Watermark />
         </div>
 
-        {/* Info & Admin Controls */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-surface border border-border p-8 rounded-3xl">
-          <div className="text-center md:text-left space-y-1">
-             <h1 className="font-syne font-bold text-3xl text-text">
-                {(render.composition as Record<string, unknown>)['title'] as string || 'Shared Recording'}
-             </h1>
-             <p className="font-mono text-sm text-muted">
-                Created with VibeCam V2 · High Quality Export
-             </p>
-          </div>
-
-          {/* Admin Tools (Owner Only) */}
-          {user && user.id === render.user_id && (
-            <div className="flex items-center gap-3 animate-fade-in">
-               <a 
-                href={render.output_url} 
-                download
-                className="flex items-center gap-2 px-6 py-3 bg-accent text-surface font-syne font-bold rounded-xl hover:bg-white transition-all shadow-lg shadow-accent/20"
-              >
-                <Download size={18} /> Download MP4
-              </a>
-            </div>
-          )}
+        {/* Info Card */}
+        <div className="w-full bg-surface/30 backdrop-blur-md border border-border p-10 rounded-[40px] mb-20">
+           <div className="space-y-3">
+              <h1 className="font-syne font-bold text-4xl tracking-tight text-white">
+                 {(render.composition as Record<string, unknown>)['title'] as string || 'Untitled Recording'}
+              </h1>
+              <p className="font-mono text-sm text-muted uppercase tracking-[0.2em]">
+                 Created with VibeCam V2 · High Quality Export
+              </p>
+           </div>
         </div>
 
-        {/* CTA for anonymous (Non-Owners) */}
-        {(!user || user.id !== render.user_id) && (
-          <div className="flex flex-col items-center gap-6 pt-12 border-t border-border/40">
-             <p className="font-mono text-sm text-muted">Want to record and edit videos like this?</p>
-             <Link href="/auth/signup" className="px-10 py-4 bg-accent text-surface font-syne font-bold rounded-2xl hover:bg-white transition-all shadow-xl shadow-accent/40 text-lg">
-                Start Recording for Free
-             </Link>
-          </div>
-        )}
-
-        {/* Branding Footer */}
-        <div className="flex justify-center pt-8 pb-12">
-          <div className="flex items-center gap-2 px-4 py-2 bg-surface/50 border border-border rounded-full font-mono text-[10px] text-muted">
-             <span>Rendered by</span>
-             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-             <span className="font-bold text-text uppercase tracking-widest">VibeCam V2 Engine</span>
-          </div>
+        {/* Glowing CTA Section */}
+        <div className="flex flex-col items-center gap-8 py-10">
+           <p className="font-mono text-xs text-muted tracking-widest uppercase">Want to record and edit videos like this?</p>
+           <Link 
+             href="/auth/signup" 
+             className="relative group"
+           >
+              {/* Button Glow */}
+              <div className="absolute -inset-1 bg-accent rounded-2xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
+              <div className="relative px-12 py-5 bg-accent text-surface font-syne font-bold rounded-2xl hover:bg-white transition-all text-lg shadow-2xl shadow-accent/20">
+                 Start Recording for Free
+              </div>
+           </Link>
         </div>
       </div>
     </div>
