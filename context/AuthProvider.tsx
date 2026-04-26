@@ -9,7 +9,8 @@ import {
   createUserWithEmailAndPassword, 
   signOut as firebaseSignOut,
   User as FirebaseUser,
-  sendEmailVerification
+  sendEmailVerification,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import type { User, Session } from "@supabase/supabase-js";
 
@@ -20,6 +21,7 @@ type AuthContextType = {
   loading: boolean;
   signUp: (email: string, password: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  resetPassword: (email: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -124,13 +126,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const resetPassword = useCallback(async (email: string) => {
+    try {
+      await sendPasswordResetEmail(firebaseAuth, email);
+      return { error: null };
+    } catch (error: any) {
+      return { error: error.message };
+    }
+  }, []);
+
   const signOut = useCallback(async () => {
     await firebaseSignOut(firebaseAuth);
     await supabase.auth.signOut();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, firebaseUser, session, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, firebaseUser, session, loading, signUp, signIn, resetPassword, signOut }}>
       {children}
     </AuthContext.Provider>
   );
