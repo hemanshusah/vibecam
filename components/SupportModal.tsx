@@ -101,13 +101,13 @@ export function SupportModal({ isOpen, onClose }: SupportModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center animate-fade-in pointer-events-auto">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in pointer-events-auto">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative w-full max-w-md bg-surface border border-border rounded-2xl p-8 shadow-2xl flex flex-col items-center">
+      <div className="relative w-full max-w-md bg-surface border border-border rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col items-center max-h-[95vh] overflow-y-auto">
         <button 
           onClick={onClose} 
-          className="absolute top-4 right-4 text-muted hover:text-text transition-colors"
+          className="absolute top-4 right-4 text-muted hover:text-text transition-colors z-10"
         >
           <X size={20} />
         </button>

@@ -3,6 +3,7 @@ import { useStorage, RecordingMetadata } from '@/hooks/useStorage';
 import { formatTime } from '@/lib/format';
 import { Calendar, Video, ArrowRight } from 'lucide-react';
 import { useAppStore } from '@/store/useAppStore';
+import { Watermark } from './Watermark';
 
 export function WatchScreen({ id }: { id: string }) {
   const { loadRecording } = useStorage();
@@ -63,7 +64,7 @@ export function WatchScreen({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex-grow flex items-center justify-center">
         <div className="w-8 h-8 rounded-full bg-accent animate-pulseSlow" />
       </div>
     );
@@ -71,7 +72,7 @@ export function WatchScreen({ id }: { id: string }) {
 
   if (!recording || !blobUrl) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 space-y-6 text-center">
+      <div className="flex-grow flex flex-col items-center justify-center p-6 space-y-6 text-center">
         <h2 className="font-syne font-bold text-3xl text-red">Recording not found</h2>
         <p className="font-mono text-muted max-w-sm">
           This cloud recording may have expired, or the ID is incorrect.
@@ -90,7 +91,7 @@ export function WatchScreen({ id }: { id: string }) {
   const dateObj = new Date(recording.date);
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6 animate-fade-in pt-24 pb-32">
+    <div className="flex-grow flex flex-col items-center p-6 animate-fade-in pt-28 pb-32">
       <div className="w-full max-w-5xl flex justify-between items-end mb-6">
         <div>
           <h1 className="font-syne font-bold text-3xl md:text-4xl mb-2">Recording Viewing Session</h1>
@@ -100,12 +101,16 @@ export function WatchScreen({ id }: { id: string }) {
           </div>
         </div>
 
-        <button 
-          onClick={startFresh}
-          className="flex items-center gap-2 group text-muted hover:text-accent font-mono text-sm transition-colors py-2"
-        >
-          Create yours <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-        </button>
+        <div className="flex flex-col md:flex-row items-end gap-4">
+          <div className="flex flex-col gap-2">
+             <button 
+                onClick={startFresh}
+                className="flex items-center gap-2 group text-muted hover:text-accent font-mono text-[10px] transition-colors py-1 px-4"
+              >
+                Create new <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+          </div>
+        </div>
       </div>
 
       <div className="relative w-full max-w-5xl aspect-video rounded-2xl overflow-hidden border border-border shadow-2xl bg-black">
@@ -117,6 +122,7 @@ export function WatchScreen({ id }: { id: string }) {
           onTimeUpdate={handleTimeUpdate}
           className="w-full h-full object-contain"
         />
+        <Watermark />
       </div>
     </div>
   );

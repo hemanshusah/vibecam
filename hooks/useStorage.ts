@@ -17,6 +17,7 @@ export type RecordingStorageItem = RecordingMetadata & {
   blob: Blob;
   videoUrl?: string;
   userId?: string;
+  tag?: string;
 };
 
 export function useStorage() {
@@ -47,7 +48,7 @@ export function useStorage() {
         duration: Math.round(item.duration),
         trim_start: item.trimStart,
         trim_end: item.trimEnd,
-        mime_type: item.mimeType,
+        mime_type: (item as any).tag || item.mimeType,
         has_mic: item.hasMic,
         has_camera: item.hasCamera,
       };
