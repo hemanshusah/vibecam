@@ -6,6 +6,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Watermark } from '@/components/Watermark';
+import { useAuth } from '@/context/AuthProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,6 +23,7 @@ export default function WatchRecordingPage() {
   const params = useParams();
   const id = params?.id as string;
   
+  const { user } = useAuth();
   const [recording, setRecording] = useState<VideoRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -80,10 +82,10 @@ export default function WatchRecordingPage() {
            </Link>
            
            <Link 
-             href="/auth/signup" 
+             href={user ? "/dashboard" : "/auth/signup"} 
              className="px-6 py-2 bg-surface/50 border border-border hover:border-accent hover:text-accent rounded-xl font-syne font-bold text-xs transition-all flex items-center gap-2"
            >
-             Join VibeCam <ArrowLeft size={14} className="rotate-180" />
+             {user ? "Go to Dashboard" : "Join VibeCam"} <ArrowLeft size={14} className="rotate-180" />
            </Link>
         </div>
 
