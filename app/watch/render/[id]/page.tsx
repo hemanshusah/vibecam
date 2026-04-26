@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Download, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Player } from '@remotion/player';
 import { VibeCamComposition } from '@/remotion/VibeCamComposition';
@@ -10,7 +10,6 @@ import { getTotalDurationFrames } from '@/lib/remotion-utils';
 import { useParams } from 'next/navigation';
 import { CompositionProps } from '@/lib/remotion-types';
 import { Watermark } from '@/components/Watermark';
-import { useAuth } from '@/context/AuthProvider';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +28,6 @@ export default function WatchExportPage() {
   const params = useParams();
   const id = params?.id as string;
   
-  const { user } = useAuth();
   const [render, setRender] = useState<RenderRecord | null>(null);
   const [loading, setLoading] = useState(true);
 

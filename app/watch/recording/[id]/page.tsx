@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Download, ArrowLeft, Scissors } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Watermark } from '@/components/Watermark';
-import { useAuth } from '@/context/AuthProvider';
-import { formatTime } from '@/lib/format';
+import { Watermark } from '@/components/Watermark';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +23,6 @@ export default function WatchRecordingPage() {
   const params = useParams();
   const id = params?.id as string;
   
-  const { user } = useAuth();
   const [recording, setRecording] = useState<VideoRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +59,6 @@ export default function WatchRecordingPage() {
     );
   }
 
-  const isOwner = user && user.id === recording.user_id;
 
   const toggleFullscreen = () => {
     const container = document.getElementById('player-container');
