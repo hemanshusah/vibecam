@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing ID or title' }, { status: 400 });
     }
 
-    let updateData: any = { title };
+    let updateData: { title?: string; composition?: Record<string, unknown> } = { title };
     
     // Renders table stores title inside the composition JSON
     if (type === 'render') {
@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
     if (error) throw error;
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error('Rename API error:', err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error('Rename API error:', message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

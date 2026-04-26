@@ -42,7 +42,7 @@ export default function WatchRecordingPage() {
       setLoading(false);
     }
     fetchRecording();
-  }, [params.id]);
+  }, [id]);
 
   if (loading) {
     return (
