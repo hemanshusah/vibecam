@@ -145,7 +145,7 @@ export default function WatchExportPage() {
            </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Download Button */}
         <div className="w-full flex flex-col gap-4 items-center mb-8">
           {render.output_url && (
             <button
