@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Download } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Watermark } from '@/components/Watermark';
@@ -43,6 +43,23 @@ export default function WatchRecordingPage() {
     fetchRecording();
   }, [id]);
 
+  const handleDownloadVideo = async (url: string, title: string) => {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `${title.replace(/\s+/g, "-").toLowerCase()}.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+    } catch (err) {
+      console.error("Failed to download:", err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center">
@@ -82,7 +99,7 @@ export default function WatchRecordingPage() {
            </Link>
            
            <Link 
-             href={user ? "/dashboard" : "/auth/signup"} 
+             href={user ? "/dashboard" : "/auth/register"} 
              className="px-6 py-2 bg-surface/50 border border-border hover:border-accent hover:text-accent rounded-xl font-syne font-bold text-xs transition-all flex items-center gap-2"
            >
              {user ? "Go to Dashboard" : "Join VibeCam"} <ArrowLeft size={14} className="rotate-180" />
@@ -116,11 +133,21 @@ export default function WatchRecordingPage() {
            </div>
         </div>
 
+        {/* Action Buttons */}
+        <div className="w-full flex flex-col gap-4 items-center mb-8">
+          <button
+            onClick={() => handleDownloadVideo(recording.video_url, recording.title || 'Recording')}
+            className="px-8 py-3 bg-accent/20 border border-accent text-accent font-syne font-bold rounded-xl hover:bg-accent hover:text-surface transition-all flex items-center gap-2"
+          >
+            <Download size={16} /> Download Video
+          </button>
+        </div>
+
         {/* Glowing CTA Section */}
         <div className="flex flex-col items-center gap-8 py-10">
            <p className="font-mono text-xs text-muted tracking-widest uppercase">Want to record and edit videos like this?</p>
            <Link 
-             href="/auth/signup" 
+             href="/auth/register" 
              className="relative group"
            >
               {/* Button Glow */}
