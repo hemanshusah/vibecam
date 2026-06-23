@@ -133,7 +133,7 @@ export default function WatchRecordingPage() {
            </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Download Button */}
         <div className="w-full flex flex-col gap-4 items-center mb-8">
           <button
             onClick={() => handleDownloadVideo(recording.video_url, recording.title || 'Recording')}
